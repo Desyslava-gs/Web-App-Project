@@ -32,10 +32,10 @@ namespace WebApp.Models.Repairs
         public string CarTitle { get; set; }
          
         //?
-        [Display(Name = "?")]
+        [Display(Name = "Автомобил")]
         public string CarId { get; init; }
        
-        [Display(Name = "/")]
+        [Display(Name = "Тип Ремонт")]
         public string RepairTypeId { get; init; }
 
 

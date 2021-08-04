@@ -203,7 +203,6 @@ namespace WebApp.Controllers
             }
 
             var car =  data.Cars
-                
                 .Select(c => new DeleteCarViewModel
                 {
                     Id = c.Id,

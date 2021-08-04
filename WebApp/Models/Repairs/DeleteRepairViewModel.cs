@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebApp.Models.Repairs
 {
-    public class CarIdViewModel
+    public class DeleteRepairViewModel
     {
         //public IEnumerable<IndexRepairAllViewModel> CreateRepairFormModel { get; set; }
 

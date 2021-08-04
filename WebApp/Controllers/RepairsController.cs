@@ -54,7 +54,7 @@ namespace WebApp.Controllers
                 .Select(c => new DetailsRepairViewModel
                 {
                     Id =c.Id,
-                    CarTitle = c.Car.Make,
+                    CarTitle = c.Car.Make+" "+c.Car.Model+ "\r\n"+c.Car.Year,
                     Description = c.Description,
                     StartDate = c.StartDate.ToString(),
                     EndDate = c.EndDate.ToString(),
@@ -62,7 +62,7 @@ namespace WebApp.Controllers
                     PictureUrl = c.Car.PictureUrl,
                     Price = c.Price,
                     CarId = c.CarId,
-                    RepairTypeId = c.RepairTypeId
+                    RepairTypeId = c.RepairType.Name
                     
                 }).ToList()
                 .FirstOrDefault();
