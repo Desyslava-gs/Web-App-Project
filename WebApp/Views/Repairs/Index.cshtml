@@ -1,0 +1,102 @@
+﻿@model IEnumerable<IndexRepairAllViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    var first =  Model.ToList().FirstOrDefault();
+    var carID = first.CarId;
+
+}
+
+<div class="container">
+    <div class="container-fluid">
+        <h2 class="text-center ">Ремонти</h2>
+        <h2 class="text-center ">@first.CarTitle</h2>
+        <a class="btn btn-warning mt-3 ml-3 font-weight-bold" asp-controller="Repairs" asp-action="Create"  asp-route-id="@carID">Добави Ремонт... </a>
+
+        <hr />
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <label asp-for="@first.Name"></label>
+                </th>
+                <th>
+                    <label asp-for="@first.Price"></label>
+                </th>
+                <th>
+                    <label asp-for="@first.StartDate"></label>
+                </th>
+                <th>
+                    <label asp-for="@first.EndDate"></label>
+                </th>
+                <th>
+                    <label asp-for="@first.Description"></label>
+                </th>
+                <th>
+                    <label asp-for="@first.RepairTypeId"></label>
+                </th>
+                <th>
+                    <label hidden="" asp-for="@first.CarId"></label>
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @item.Name
+                        </td>
+                        <td>
+                            @item.Price
+                        </td>
+                        <td>
+                            @item.StartDate
+                        </td>
+                        <td>
+                            @item.EndDate
+                        </td>
+                        <td>
+                            @item.Description
+                        </td>
+                        <td>
+                            @item.RepairTypeId
+                        </td>
+                        <td hidden="">
+                            @item.CarId
+                        </td>
+
+                        <td>
+                            <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            <a class="btn btn-info"  asp-action="Details" asp-route-id="@item.Id">Details</a> 
+                            
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    @if (!Model.Any())
+    {
+        <div class="container">
+            <div style="margin-top: 3%; width:max-content; " @*class="page-caption1"*@>
+                <h1 class="page-title">
+                    <ul class="a">
+                        <li style="animation-duration: 4s; color: #FFC312; font-weight: 1000;" class="a1">You don't have cars to repair...</li>
+                    </ul>
+                </h1>
+            </div>
+        </div>
+    }
+    <div>
+        <a class="float-right" asp-controller="Cars" asp-action="Details" asp-route-id="@first.CarId">Go to Back</a>
+    </div>
+</div>

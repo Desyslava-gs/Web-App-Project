@@ -1,0 +1,88 @@
+﻿@model EditRepairFormModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Repair</h4>
+<hr />
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-9 ">
+            <form asp-action="Edit" method="post">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="CarId" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                @*<a asp-controller="Repairs" asp-action="Create" asp-route-id="id" /a>*@
+
+                <span asp-validation-for="Name" class="text-danger"></span>
+                <div class="input-group form-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"></span>
+                    </div>
+                    <input asp-for="Name" class="form-control" placeholder="Име">
+                </div>
+                <span asp-validation-for="Price" class="text-danger"></span>
+                <div class="input-group form-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"></span>
+                    </div>
+                    <input asp-for="Price" class="form-control" placeholder="Цена">
+                </div>
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+                <div class="input-group form-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"></span>
+                    </div>
+                    <input asp-for="StartDate" type="date" class="form-control" placeholder="Начална Дата">
+                </div>
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+                <div class="input-group form-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"></span>
+                    </div>
+                    <input asp-for="EndDate" type="date" class="form-control" placeholder="Крайна Дата">
+                </div>
+                <span asp-validation-for="Description" class="text-danger"></span>
+                <div class="input-group form-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"></span>
+                    </div>
+                    <input asp-for="Description" class="form-control" placeholder="Бележка">
+                </div>
+                <span asp-validation-for="RepairTypes" class="text-danger"></span>
+                <div class="input-group form-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"></span>
+                    </div>
+                    <select asp-for="RepairTypeId" class="form-control">
+                        <option value="" disabled selected hidden>Вид Ремонт</option>
+                        @foreach (var item in Model.RepairTypes)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    </select>
+
+                    @*<span asp-validation-for="CarId" class="text-danger"></span>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"></span>
+                            </div>
+                            <select asp-for="CarId" class="form-control" asp-items="ViewBag.Car.Id"></select>
+                        </div>*@
+                </div>
+                <div class="float-right">
+                    <input type="submit" value="Edit" class="btn btn-warning" />
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <div>
+        <a class="float-right" asp-action="Index" asp-route-id="@Model.Id">Go to Back</a>
+    </div>
+
+
+</div>

@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Marserviz</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+<header>
+    <div class="container-fluid">
+        <img style="width: 100%; height: 95px" src="/images/marserviz1 (2).jpg">
+    </div>
+    <nav class="navbar navbar-expand-sm bg-light navbar-light ">
+        
+
+        <div class="container">
+
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index" style="font-size: 17px; color: #90908d; font-weight: 600;">Начало</a>
+            <a class="navbar-item" asp-controller="Home" asp-action="Services">Услуги</a>
+            <a class="navbar-item" asp-controller="Home" asp-action="Contacts">Контакти</a>
+
+            <partial name="_LoginPartial"/>
+        </div>
+
+    </nav>
+</header>
+    <div>
+        <main role="main" class="mt-0">
+            @RenderBody()
+        </main>
+    </div>
+<footer class="page-footer font-small blue">
+    <div class="footer-copyright text-center py-3">© @DateTime.UtcNow.Year Copyright:
+        <a asp-controller="Home" asp-action="Index"> MarServiz.com</a>
+    </div>
+</footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

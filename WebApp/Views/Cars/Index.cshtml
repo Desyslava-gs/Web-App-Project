@@ -1,0 +1,61 @@
+﻿@model List<IndexCarAllViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+@if (!Model.Any())
+{
+    <div style="margin-top:0%; margin-bottom: 2%;" class="page-header4">
+        <div class="container">
+            <h2  class="text-center text-light">Ремонтирани Автомобили</h2>
+        </div>
+        <div  class="container">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div style="margin-top: 3%; width:max-content; " class="page-caption1">
+                        <h1 class="page-title">
+                            <ul class="a">
+                                <li style="animation-duration: 4s; color: #FFC312; font-weight: 1000;" class="a1">You don't have cars to repair...</li>
+                            </ul>
+                            <div class="container">
+                                <p>
+                                    <a class="btn btn-warning font-weight-bold" asp-action="Create">Добави Автомобил...</a>
+                                </p>
+                            </div>
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (Model.Any())
+{
+    <div class="page-header3" style="margin-top: 0%; margin-bottom: 5%;">
+        <div class="container-fluid">
+            <h2 class="text-light text-center ">Ремонтирани Автомобили</h2>
+            <a class="btn btn-warning mt-3 ml-3 font-weight-bold" asp-action="Create">Добави Автомобил...</a>
+            <hr />
+        </div>
+        <div class="card-group">
+            @foreach (var item in Model)
+            {
+                <div class="added-destinations">
+                    <a asp-action="Details" asp-route-id="@item.Id" class="added-destination">
+                        <img src="@item.PictureUrl"
+                             alt="" class="picture-added-destination">
+                        <h3>@item.PlateNumber</h3>
+                        <span>@item.Make @item.Model </span> <span>@item.Year</span>
+                        
+                    </a>
+                    @*<div>
+                        <button class="btn btn-info" asp-controller="Repairs" asp-action="Index" asp-route-id="@item.Id">Repairs</button>
+                        <a class="btn btn-info" asp-controller="Repairs" asp-action="Create" asp-route-id="@item.Id">RepairsCreate</a>
+                    </div>*@
+                </div>
+
+            }
+        </div>
+    </div>
+}
+
