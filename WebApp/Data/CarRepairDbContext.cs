@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Data.Models;
@@ -21,7 +22,7 @@ namespace WebApp.Data
         public DbSet<RepairType> RepairTypes { get; set; }
         public DbSet<Part> Parts { get; set; }
         public DbSet<Provider> Providers { get; set; }
-       
+        public DbSet<Client> Clients { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -55,7 +56,12 @@ namespace WebApp.Data
                 .WithMany( p=> p.Parts)
                 .HasForeignKey(p=>p.ProviderId)
                 .OnDelete(deleteBehavior:DeleteBehavior.Restrict);
-
+            builder
+                .Entity<Client>()
+                .HasOne<IdentityUser>()
+                .WithOne()
+                .HasForeignKey<Client>(d => d.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);
         }

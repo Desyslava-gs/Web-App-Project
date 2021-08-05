@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebApp.Data;
+using WebApp.Data.Models;
 using WebApp.Infrastructure;
 using WebApp.Services.Repairs;
 
@@ -39,6 +40,7 @@ namespace WebApp
                 {
                     options.SignIn.RequireConfirmedAccount = false;
                     options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireDigit = false;
                     options.Password.RequireUppercase = false;
                     options.Password.RequireLowercase = false;
                     options.Password.RequiredUniqueChars = 0;
@@ -87,32 +89,7 @@ namespace WebApp
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapRazorPages();
 
-                //endpoints.MapControllerRoute(
-                //    name: "services",
-                //    pattern: "{controller=Services}/{action=Services}");
-                //endpoints.MapControllerRoute(
-                //    name: "contacts",
-                //    pattern: "{controller=Contacts}/{action=Contacts}");
 
-                //endpoints.MapControllerRoute(
-                //    name: "cars",
-                //    pattern: "{controller=Cars}/{action=Cars}");
-
-
-                //endpoints.MapControllerRoute(
-                //    name: "cars",
-                //    pattern: "{controller=Cars}/{action=Details}/{id?}");
-
-
-                //endpoints.MapControllerRoute(
-                //       name: "repairs",
-                //       pattern: "{controller=Repairs}/{action=Create}/{id?}/{carid?}");
-
-                endpoints.MapControllerRoute(
-                     name: "blog",
-                     pattern: "/Article/{date}/{id}",
-                     defaults: new { controller = "Blog", action = "Article" },
-                     constraints: new { date = "[0-9]" });
                 endpoints.MapRazorPages();
             });
 

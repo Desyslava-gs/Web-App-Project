@@ -58,5 +58,12 @@ namespace WebApp.Data
             public const int IbanNumberMaxLength = 34;
             public const int AddressMaxLength = 120;
         }
+        public class Client
+        {
+            public const int NameMaxLength = 20;
+            public const int PhoneNumberMaxLength = 20;
+
+        }
+       
     }
 }

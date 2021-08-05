@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApp.Data.Models;
 
 namespace WebApp.Models.Repairs
 {
@@ -17,6 +18,7 @@ namespace WebApp.Models.Repairs
         public decimal Price { get; set; }
 
         [Display(Name = "Начало")]
+        [DisplayFormat(DataFormatString = "{dd/MM/yyyy}")]
         public string StartDate { get; set; }
 
 
@@ -38,6 +40,6 @@ namespace WebApp.Models.Repairs
         [Display(Name = "Тип Ремонт")]
         public string RepairTypeId { get; init; }
 
-
+        public IEnumerable<Part> Parts { get; set; }
     }
 }
