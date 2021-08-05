@@ -8,7 +8,7 @@ using WebApp.Data.Models;
 
 namespace WebApp.Controllers
 {
-    public class UsersController : Controller
+    public class ClientsController : Controller
     {
         //private readonly UserManager<User> userManager;
         //private readonly SignInManager<User> signInManager;

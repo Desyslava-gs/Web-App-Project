@@ -19,6 +19,13 @@ namespace WebApp.Models.Cars
         public int Year { get; set; }
 
         public string PictureUrl { get; set; }
-        
+
+        public int FinishedRepairs { get; set; }
+
+        public int AllCars { get; set; }
+        public int AllClients { get; set; }
+
+
+
     }
 }

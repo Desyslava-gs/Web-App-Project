@@ -33,7 +33,10 @@ namespace WebApp.Controllers
                 Model = c.Model,
                 PictureUrl = c.PictureUrl,
                 PlateNumber = c.PlateNumber,
-                Year = c.Year
+                Year = c.Year,
+                FinishedRepairs = this.data.Repairs.Count(r => r.EndDate < DateTime.UtcNow),
+                AllCars = this.data.Cars.Count(),
+                AllClients = this.data.Clients.Count()
             }).ToList();
 
             return View(car);
