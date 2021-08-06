@@ -63,14 +63,13 @@
                             <option value="@item.Id">@item.Name</option>
                         }
                     </select>
-
-                    @*<span asp-validation-for="CarId" class="text-danger"></span>
-            <div class="input-group form-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text"></span>
-                </div>
-                <select asp-for="CarId" class="form-control" asp-items="ViewBag.Car.Id"></select>
-            </div>*@
+                      @*<span asp-validation-for="CarId" class="text-danger"></span>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"></span>
+                            </div>
+                            <select asp-for="CarId" class="form-control" asp-items="ViewBag.Car.Id"></select>
+                        </div>*@
                 </div>
                 <div class="float-right">
                     <input type="submit" value="Create" class="btn btn-warning" />
@@ -82,80 +81,4 @@
     <div>
         <a class="float-right" asp-controller="Cars" asp-action="Details" asp-route-id="@Model.CarId">Go to Back</a>
     </div>
-
-
 </div>
-<!--<h1>Create</h1>
-
-<h4>Repair</h4>
-<hr />
-<div class="container">
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-action="Create" method="post">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>-->
-@*<div class="form-group">
-        <label asp-for="Id" class="control-label"></label>
-        <input asp-for="Id" class="form-control" />
-        <span asp-validation-for="Id" class="text-danger"></span>
-    </div>*@
-<!--<div class="form-group">
-    <label asp-for="Name" class="control-label"></label>
-    <input asp-for="Name" class="form-control" />
-    <span asp-validation-for="Name" class="text-danger"></span>
-</div>
-<div class="form-group">
-    <label asp-for="Price" class="control-label"></label>
-    <input asp-for="Price" class="form-control" />
-    <span asp-validation-for="Price" class="text-danger"></span>
-</div>
-<div class="form-group">
-    <label asp-for="StartDate" class="control-label"></label>
-    <input asp-for="StartDate" class="form-control" />
-    <span asp-validation-for="StartDate" class="text-danger"></span>
-</div>
-<div class="form-group">
-    <label asp-for="EndDate" class="control-label"></label>
-    <input asp-for="EndDate" class="form-control" />
-    <span asp-validation-for="EndDate" class="text-danger"></span>
-</div>
-<div class="form-group">
-    <label asp-for="Description" class="control-label"></label>
-    <input asp-for="Description" class="form-control" />
-    <span asp-validation-for="Description" class="text-danger"></span>
-</div>
-<!--<div class="form-group">
-    <label asp-for="CarId" class="control-label"></label>
-    <input asp-for="CarId" class="form-control"/>
-    <select asp-for="CarId" class="form-control" asp-items="ViewBag.CarId"></select>-->
--->
-<!--@*<select asp-for="CarId" class="form-control">
-    <option value="" disabled selected hidden>Вид Гориво</option>
-    @foreach (var item in Model.RepairTypes)
-    {
-        <option value="@item.Id">@item.Name</option>
-    }
-</select>*@-->
-<!--<!--</div>-->
-<!--<div class="form-group">
-    <label asp-for="RepairTypeId" class="control-label"></label>-->
-@* <select asp-for="RepairTypeId" class="form-control" asp-items="ViewBag.RepairTypeId"></select>*@
-@*<select asp-for="RepairTypeId" class="form-control">
-    <option value="" disabled selected hidden>Вид Гориво</option>
-    @foreach (var item in Model.RepairTypes)
-    {
-        <option value="@item.Id">@item.Name</option>
-    }
-</select>
-                </div>
-<div class="form-group">
-    <input type="submit" value="Create" class="btn btn-primary" />
-</div>
-            </form>
-        </div>
-    </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-</div>-->*@

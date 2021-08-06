@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using WebApp.Models.Cars;
 using static WebApp.Data.DataConstants.Car;
 
 namespace WebApp.Data.Models
@@ -42,10 +39,10 @@ namespace WebApp.Data.Models
 
         public string Description { get; set; }
 
-       
         public string FuelTypeId { get; set; }
+
         public FuelType FuelType { get; init; }
-        
-        public IEnumerable<Repair> Repairs { get; set; } = new List<Repair>(); 
+
+        public IEnumerable<Repair> Repairs { get; set; } = new List<Repair>();
     }
 }

@@ -16,7 +16,6 @@
                 <input type="hidden" asp-for="CarId" />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 @*<a asp-controller="Repairs" asp-action="Create" asp-route-id="id" /a>*@
-
                 <span asp-validation-for="Name" class="text-danger"></span>
                 <div class="input-group form-group">
                     <div class="input-group-prepend">
@@ -64,7 +63,6 @@
                             <option value="@item.Id">@item.Name</option>
                         }
                     </select>
-
                     @*<span asp-validation-for="CarId" class="text-danger"></span>
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
@@ -76,13 +74,10 @@
                 <div class="float-right">
                     <input type="submit" value="Edit" class="btn btn-warning" />
                 </div>
-
             </form>
         </div>
     </div>
     <div>
         <a class="float-right" asp-action="Index" asp-route-id="@Model.Id">Go to Back</a>
     </div>
-
-
 </div>

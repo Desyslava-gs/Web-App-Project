@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace WebApp.Models.Cars
+﻿namespace WebApp.Models.Cars
 {
     public class IndexCarAllViewModel 
     {
@@ -23,9 +16,8 @@ namespace WebApp.Models.Cars
         public int FinishedRepairs { get; set; }
 
         public int AllCars { get; set; }
+
         public int AllClients { get; set; }
-
-
-
+        
     }
 }

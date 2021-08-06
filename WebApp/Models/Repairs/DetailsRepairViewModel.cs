@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using WebApp.Data.Models;
 
 namespace WebApp.Models.Repairs
@@ -21,7 +18,6 @@ namespace WebApp.Models.Repairs
         [DisplayFormat(DataFormatString = "{dd/MM/yyyy}")]
         public string StartDate { get; set; }
 
-
         [Display(Name = "Край")]
         public string EndDate { get; set; }
         
@@ -29,15 +25,17 @@ namespace WebApp.Models.Repairs
         public string PictureUrl { get; set; }
 
         [Display(Name = "Бележка")]
+
         public string Description { get; set; }
         [Display(Name = "Кола")]
+
         public string CarTitle { get; set; }
          
-        //?
         [Display(Name = "Автомобил")]
         public string CarId { get; init; }
        
         [Display(Name = "Тип Ремонт")]
+
         public string RepairTypeId { get; init; }
 
         public IEnumerable<Part> Parts { get; set; }

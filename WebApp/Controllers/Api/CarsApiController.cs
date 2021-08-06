@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Data;
-using WebApp.Data.Models;
+using WebApp.Models.Cars;
 
 namespace WebApp.Controllers.Api
 {
@@ -16,38 +13,84 @@ namespace WebApp.Controllers.Api
         private readonly CarRepairDbContext data;
 
         public CarsApiController(CarRepairDbContext data)
-            => this.data = data;
-
-        [HttpGet]
-        public ActionResult<Car> Cars()
         {
-            var cars= this.data.Cars.ToList();
-            if (!cars.Any())
-            {
-                return NotFound();
-            }
-
-            return Ok(cars);
+            this.data = data;
         }
-
-        [HttpGet]
-        [Route("{id}")]
-        public ActionResult<Car> GetDetails(string id)
+        
+        public IActionResult Index()
         {
-            var car = this.data.Cars.Find(id);
-            if (car==null)
-            {
-                return NotFound();
-            }
+            var car = this.data.Cars
+                .OrderBy(c => c.Repairs.Count())
+                .Select(c => new IndexCarAllViewModel
+                {
+                    Id = c.Id,
+                    Make = c.Make,
+                    Model = c.Model,
+                    PictureUrl = c.PictureUrl,
+                    PlateNumber = c.PlateNumber,
+                    Year = c.Year,
+                    FinishedRepairs = this.data.Repairs.Count(r => r.EndDate < DateTime.UtcNow),
+                    AllCars = this.data.Cars.Count(),
+                    AllClients = this.data.Clients.Count()
+                }).ToList();
 
             return Ok(car);
+
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //[HttpGet]
+        //public ActionResult<Car> Cars()
+        //{
+        //    var cars= this.data.Cars.ToList();
+        //    if (!cars.Any())
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return Ok(cars);
+        //}
+
+        //[HttpGet]
+        //[Route("{id}")]
+        //public ActionResult<Car> GetDetails(string id)
+        //{
+        //    var car = this.data.Cars.Find(id);
+        //    if (car==null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return Ok(car);
+        //}
+
+
+
+
+
+
+
 
         //[HttpPost]
         //public IActionResult SaveCar(Car car)
         //{
 
         //}
+
+
+
+
 
 
         //private readonly ICarService cars;

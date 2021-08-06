@@ -1,22 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Data;
-using WebApp.Models.Api;
+using WebApp.Models.Api.Statistics;
 
 namespace WebApp.Controllers.Api
 {
-   
-        [ApiController]
+    [ApiController]
         [Route("api/statistics")]
         public class StatisticsApiController : ControllerBase
         {
             private readonly CarRepairDbContext data;
-
             public StatisticsApiController(CarRepairDbContext data)
-                => this.data = data;
+            {
+                this.data = data;
+            }
 
             [HttpGet]
             public StatisticsModel Get()
@@ -31,8 +29,6 @@ namespace WebApp.Controllers.Api
 
                 return statistics;
             }
-
-
         }
     }
 

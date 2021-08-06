@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace WebApp.Models.Api
+﻿namespace WebApp.Models.Api.Statistics
 {
     public class StatisticsModel
     {

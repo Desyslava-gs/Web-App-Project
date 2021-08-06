@@ -32,7 +32,6 @@ namespace WebApp.Data.Models
        [Required]
        public string Email { get; set; }
 
-
        [Required]
        [MaxLength(PhoneNumberMaxLength)]
        public string PhoneNumber { get; set; }

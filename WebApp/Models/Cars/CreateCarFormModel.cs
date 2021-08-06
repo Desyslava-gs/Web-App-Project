@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using WebApp.Data.Models;
-using WebApp.Infrastructure;
 using static WebApp.Data.DataConstants.Car;
 namespace WebApp.Models.Cars
 {
     public class CreateCarFormModel
     {
-        //[Key]
-        //[Required]
         public string Id { get; set; }
-
 
         [Required]
         [StringLength(MakeMaxLength, MinimumLength = MakeMinLength)]
@@ -22,7 +14,6 @@ namespace WebApp.Models.Cars
         [Required]
         [StringLength(ModelMaxLength, MinimumLength =ModelMinLength)]
         public string Model { get; set; }
-
 
         [Range(YearMinValue,YearMaxValue)]
         public int Year { get; set; }

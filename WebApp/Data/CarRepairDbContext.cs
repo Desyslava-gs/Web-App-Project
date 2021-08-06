@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Data.Models;
-using WebApp.Models.Cars;
 
 namespace WebApp.Data
 {
@@ -14,6 +13,7 @@ namespace WebApp.Data
         public CarRepairDbContext(DbContextOptions<CarRepairDbContext> options)
             : base(options)
         {
+
         }
 
         public DbSet<Car> Cars { get; set; }

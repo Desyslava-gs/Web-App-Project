@@ -1,31 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 
 namespace WebApp.Data.Models
 {
     using static DataConstants.Client;
 
-   
-        public class Client
-        {
-            public int Id { get; init; }
-         
-            [Required]
-            [MaxLength(NameMaxLength)]
-            public string Name { get; set; }
+    public class Client
+    {
+        public int Id { get; init; }
 
-            [Required]
-            [MaxLength(PhoneNumberMaxLength)]
-            public string PhoneNumber { get; set; }
+        [Required]
+        [MaxLength(NameMaxLength)]
+        public string Name { get; set; }
 
-            [Required]
-            public string UserId { get; set; }
+        [Required]
+        [MaxLength(PhoneNumberMaxLength)]
+        public string PhoneNumber { get; set; }
 
-            public IEnumerable<Car> Cars { get; init; } = new List<Car>();
-        }
-    
+        [Required]
+        public string UserId { get; set; }
+
+        public IEnumerable<Car> Cars { get; init; } = new List<Car>();
+    }
+
 }

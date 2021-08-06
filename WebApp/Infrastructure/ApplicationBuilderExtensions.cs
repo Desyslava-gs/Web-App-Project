@@ -40,6 +40,7 @@ namespace WebApp.Infrastructure
 
             data.SaveChanges();
         }
+
         private static void SeedFuels(CarRepairDbContext data)
         {
             if (data.FuelTypes.Any())

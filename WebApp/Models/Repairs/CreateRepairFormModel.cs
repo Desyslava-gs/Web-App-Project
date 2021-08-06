@@ -2,16 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
-using WebApp.Data.Models;
 using static WebApp.Data.DataConstants.Repair;
 
 namespace WebApp.Models.Repairs
 {
     public class CreateRepairFormModel
     {
-        
         public string Id { get; init; } 
 
         [Required] [MaxLength(NameMaxLength)] 
@@ -19,23 +15,18 @@ namespace WebApp.Models.Repairs
 
         [Column(TypeName = PriceFormat)] 
         public decimal Price { get; set; }
-
-        //?????
+        
         public DateTime? StartDate { get; set; }
-
-        //??????
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        
+        //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? EndDate { get; set; }
 
         public string Description { get; set; }
-
-      ////  [Required] //?
+        
         public string CarId { get; set; }
 
-
         public string RepairTypeId { get; init; }
-
-
+        
         public IEnumerable<RepairTypeViewModel> RepairTypes { get; set; }
     }
 }
