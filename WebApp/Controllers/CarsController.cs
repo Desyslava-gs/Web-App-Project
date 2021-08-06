@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Data;
 using WebApp.Data.Models;
+using WebApp.Infrastructure;
 using WebApp.Models.Cars;
 
 namespace WebApp.Controllers
@@ -24,20 +28,20 @@ namespace WebApp.Controllers
         // GET: Cars1
         public IActionResult Index()
         {
-            var car =this.data.Cars
-                .OrderBy(c=>c.Repairs.Count())
+            var car = this.data.Cars
+                .OrderBy(c => c.Repairs.Count())
                 .Select(c => new IndexCarAllViewModel
-            {
-                Id = c.Id,
-                Make = c.Make,
-                Model = c.Model,
-                PictureUrl = c.PictureUrl,
-                PlateNumber = c.PlateNumber,
-                Year = c.Year,
-                FinishedRepairs = this.data.Repairs.Count(r => r.EndDate < DateTime.UtcNow),
-                AllCars = this.data.Cars.Count(),
-                AllClients = this.data.Clients.Count()
-            }).ToList();
+                {
+                    Id = c.Id,
+                    Make = c.Make,
+                    Model = c.Model,
+                    PictureUrl = c.PictureUrl,
+                    PlateNumber = c.PlateNumber,
+                    Year = c.Year,
+                    FinishedRepairs = this.data.Repairs.Count(r => r.EndDate < DateTime.UtcNow),
+                    AllCars = this.data.Cars.Count(),
+                    AllClients = this.data.Clients.Count()
+                }).ToList();
 
             return View(car);
             // return View(data.Cars.OrderBy(c=>c.Repairs.Count()).ToList());
@@ -51,6 +55,10 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
+            if (!UserIsClient())
+            {
+               return RedirectToAction("Index", "Cars");
+            }
             var car = this.data.Cars
                 .Where(m => m.Id == id)
                 .Select(c => new DetailsCarViewModel
@@ -68,7 +76,7 @@ namespace WebApp.Controllers
 
                 }).ToList()
                 .FirstOrDefault();
-             
+
             if (car == null)
             {
                 return NotFound();
@@ -78,15 +86,29 @@ namespace WebApp.Controllers
         }
 
         // GET: Cars/Create
+        [Authorize]
         public IActionResult Create()
         {
+            if (!this.UserIsClient())
+            {
+                return RedirectToAction("Index", "Clients");
+            }
             return View(new CreateCarFormModel
             {
                 FuelTypes = this.GetFuelTypes()
             });
+
         }
 
+        private bool UserIsClient()
+        {
+            var userId = this.User.GetId();
+            var userIsClient = this.data.Clients.Any(c => c.UserId == userId);
+            return userIsClient;
+
+        }
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public IActionResult Create(CreateCarFormModel car)
         {
@@ -100,9 +122,11 @@ namespace WebApp.Controllers
                 car.FuelTypes = this.GetFuelTypes();
                 return View(car);
             }
+           
+
             var carData = new Car
             {
-              
+
                 Make = car.Make,
                 Model = car.Model,
                 Color = car.Color,
@@ -114,14 +138,14 @@ namespace WebApp.Controllers
                 Year = car.Year,
                 Repairs = new List<Repair>()
             };
-           
+
             this.data.Cars.Add(carData);
             this.data.SaveChanges();
             return RedirectToAction("Index", "Cars");
 
         }
-       
 
+        [Authorize]
         public IActionResult Edit(string id)
         {
             if (id == null)
@@ -129,12 +153,12 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var car =  data.Cars.Find(id);
-           
+            var car = data.Cars.Find(id);
+
             if (car == null)
             {
                 return NotFound();
-            } 
+            }
             return View(new EditCarFormModel
             {
                 FuelTypes = this.GetFuelTypes(),
@@ -152,6 +176,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [AutoValidateAntiforgeryToken]
         public IActionResult Edit(string id, EditCarFormModel car)
         {
@@ -177,7 +202,7 @@ namespace WebApp.Controllers
                         VinNumber = car.VinNumber,
                         Year = car.Year,
                     };
-                   
+
                     this.data.Update(carData);
                     this.data.SaveChanges();
                 }
@@ -198,6 +223,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Cars1/Delete/5
+        [Authorize]
         public IActionResult Delete(string id)
         {
             if (id == null)
@@ -205,7 +231,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var car =  data.Cars
+            var car = data.Cars
                 .Select(c => new DeleteCarViewModel
                 {
                     Id = c.Id,
@@ -221,7 +247,7 @@ namespace WebApp.Controllers
 
                 }).ToList()
                 .FirstOrDefault(m => m.Id == id);
-                ;
+            ;
             if (car == null)
             {
                 return NotFound();
@@ -232,6 +258,7 @@ namespace WebApp.Controllers
 
         // POST: Cars1/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize]
         [AutoValidateAntiforgeryToken]
         public IActionResult DeleteConfirmed(string id)
         {

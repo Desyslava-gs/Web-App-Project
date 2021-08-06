@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Data;
-using WebApp.Models.Cars;
+using WebApp.Models.Api.Cars;
 
 namespace WebApp.Controllers.Api
 {
@@ -21,14 +21,9 @@ namespace WebApp.Controllers.Api
         {
             var car = this.data.Cars
                 .OrderBy(c => c.Repairs.Count())
-                .Select(c => new IndexCarAllViewModel
+                .Select(c => new CarsModel
                 {
-                    Id = c.Id,
                     Make = c.Make,
-                    Model = c.Model,
-                    PictureUrl = c.PictureUrl,
-                    PlateNumber = c.PlateNumber,
-                    Year = c.Year,
                     FinishedRepairs = this.data.Repairs.Count(r => r.EndDate < DateTime.UtcNow),
                     AllCars = this.data.Cars.Count(),
                     AllClients = this.data.Clients.Count()

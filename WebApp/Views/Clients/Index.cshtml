@@ -1,0 +1,35 @@
+﻿@model ClientFormModel
+
+    @{
+        ViewData["Title"] = "Index";
+    }
+<hr />
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-9 ">
+                <form asp-action="Index" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"></span>
+                        </div>
+                        <input asp-for="Name" class="form-control" placeholder="Име">
+                    </div>
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"></span>
+                        </div>
+                        <input asp-for="PhoneNumber" class="form-control" placeholder="Телефон">
+                    </div>
+                    <div class="float-right">
+                        <input type="submit" value="Стани Клиент" class="btn btn-warning" />
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div>
+            <a class="float-right" asp-action="Index">Go to Back</a>
+        </div>
+    </div>
