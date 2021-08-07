@@ -3,10 +3,30 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApp.Data.Migrations
 {
-    public partial class Add : Migration
+    public partial class AfterDeleteAllMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Clients",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Clients", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Clients_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateTable(
                 name: "FuelTypes",
                 columns: table => new
@@ -62,11 +82,18 @@ namespace WebApp.Data.Migrations
                     VinNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     PictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FuelTypeId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    FuelTypeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ClientId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cars", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Cars_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Cars_FuelTypes_FuelTypeId",
                         column: x => x.FuelTypeId,
@@ -112,7 +139,7 @@ namespace WebApp.Data.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Price = table.Column<decimal>(type: "decimal(15,2)", nullable: false),
-                    ProviderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ProviderId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     RepairId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -133,9 +160,20 @@ namespace WebApp.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Cars_ClientId",
+                table: "Cars",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Cars_FuelTypeId",
                 table: "Cars",
                 column: "FuelTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Clients_UserId",
+                table: "Clients",
+                column: "UserId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Parts_ProviderId",
@@ -174,6 +212,9 @@ namespace WebApp.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "RepairTypes");
+
+            migrationBuilder.DropTable(
+                name: "Clients");
 
             migrationBuilder.DropTable(
                 name: "FuelTypes");

@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Data;
 using WebApp.Data.Models;
@@ -24,11 +19,23 @@ namespace WebApp.Controllers
         {
             this.data = data;
         }
-
+        public bool IsClient(string userId)
+        {
+            return  this.data
+                .Clients
+                .Any(u => u.UserId == userId);
+           
+        }
         // GET: Cars1
         public IActionResult Index()
         {
-            var car = this.data.Cars
+            if (!IsClient(this.User.GetId()))
+            {
+                return RedirectToAction("Index", "Clients");
+            }
+            var userId = this.ClientId(this.User.GetId());
+            var car = this.data.Cars 
+                .Where(c => c.ClientId == userId)
                 .OrderBy(c => c.Repairs.Count())
                 .Select(c => new IndexCarAllViewModel
                 {
@@ -44,7 +51,7 @@ namespace WebApp.Controllers
                 }).ToList();
 
             return View(car);
-            // return View(data.Cars.OrderBy(c=>c.Repairs.Count()).ToList());
+            
         }
 
         //// GET: Cars1/Details/5
@@ -54,10 +61,9 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-
             if (!UserIsClient())
             {
-               return RedirectToAction("Index", "Cars");
+                return RedirectToAction("Index", "Cars");
             }
             var car = this.data.Cars
                 .Where(m => m.Id == id)
@@ -70,7 +76,7 @@ namespace WebApp.Controllers
                     Color = c.Color,
                     Description = c.Description,
                     Year = c.Year,
-                    FuelType = c.FuelType.Name,//c.FuelTypeId,
+                    FuelType = c.FuelType.Name,
                     PlateNumber = c.PlateNumber,
                     VinNumber = c.VinNumber,
 
@@ -122,7 +128,7 @@ namespace WebApp.Controllers
                 car.FuelTypes = this.GetFuelTypes();
                 return View(car);
             }
-           
+            var clientId = this.ClientId(this.User.GetId());
 
             var carData = new Car
             {
@@ -136,13 +142,23 @@ namespace WebApp.Controllers
                 PlateNumber = car.PlateNumber,
                 VinNumber = car.VinNumber,
                 Year = car.Year,
-                Repairs = new List<Repair>()
+                Repairs = new List<Repair>(),
+                ClientId = clientId
+              
             };
 
             this.data.Cars.Add(carData);
             this.data.SaveChanges();
             return RedirectToAction("Index", "Cars");
 
+        } 
+        public string ClientId(string userId)
+        { 
+            return this.data
+                .Clients
+                .Where(d => d.UserId == userId)
+                .Select(d => d.Id)
+                .FirstOrDefault();
         }
 
         [Authorize]

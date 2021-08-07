@@ -43,6 +43,10 @@ namespace WebApp.Data.Models
 
         public FuelType FuelType { get; init; }
 
+        public string ClientId { get; set; }
+
+        public Client Client { get; init; }
+
         public IEnumerable<Repair> Repairs { get; set; } = new List<Repair>();
     }
 }

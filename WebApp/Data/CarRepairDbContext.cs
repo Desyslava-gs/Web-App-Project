@@ -33,6 +33,12 @@ namespace WebApp.Data
                 .HasForeignKey(ft=>ft.FuelTypeId)
                 .OnDelete(deleteBehavior:DeleteBehavior.Restrict);
 
+            builder.Entity<Car>()
+                .HasOne(ft=>ft.Client)
+                .WithMany(ft => ft.Cars)
+                .HasForeignKey(ft=>ft.ClientId)
+                .OnDelete(deleteBehavior:DeleteBehavior.Restrict);
+
             builder.Entity<Repair>()
                 .HasOne(c=>c.Car)
                 .WithMany(c => c.Repairs)

@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using static WebApp.Data.DataConstants.Client;
 
 namespace WebApp.Data.Models
 {
-    using static DataConstants.Client;
-
     public class Client
     {
-        public int Id { get; init; }
+        public string Id { get; init; } = Guid.NewGuid().ToString();
 
         [Required]
         [MaxLength(NameMaxLength)]
@@ -22,5 +22,4 @@ namespace WebApp.Data.Models
 
         public IEnumerable<Car> Cars { get; init; } = new List<Car>();
     }
-
 }

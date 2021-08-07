@@ -224,8 +224,8 @@ namespace WebApp.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("ClientId")
-                        .HasColumnType("int");
+                    b.Property<string>("ClientId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Color")
                         .HasMaxLength(10)
@@ -275,10 +275,8 @@ namespace WebApp.Data.Migrations
 
             modelBuilder.Entity("WebApp.Data.Models.Client", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -329,6 +327,7 @@ namespace WebApp.Data.Migrations
                         .HasColumnType("decimal(15,2)");
 
                     b.Property<string>("ProviderId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RepairId")
@@ -494,14 +493,17 @@ namespace WebApp.Data.Migrations
 
             modelBuilder.Entity("WebApp.Data.Models.Car", b =>
                 {
-                    b.HasOne("WebApp.Data.Models.Client", null)
+                    b.HasOne("WebApp.Data.Models.Client", "Client")
                         .WithMany("Cars")
-                        .HasForeignKey("ClientId");
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("WebApp.Data.Models.FuelType", "FuelType")
                         .WithMany("Cars")
                         .HasForeignKey("FuelTypeId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Client");
 
                     b.Navigation("FuelType");
                 });
@@ -520,7 +522,8 @@ namespace WebApp.Data.Migrations
                     b.HasOne("WebApp.Data.Models.Provider", "Provider")
                         .WithMany("Parts")
                         .HasForeignKey("ProviderId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("WebApp.Data.Models.Repair", "Repair")
                         .WithMany("Parts")
