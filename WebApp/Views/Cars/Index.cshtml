@@ -1,10 +1,14 @@
-﻿@model List<IndexCarAllViewModel>
+﻿@model AllCarsViewModel
 
 @{
     ViewData["Title"] = "Index";
 
 }
-@if (!Model.Any())
+
+
+
+
+@if (!Model.CarsList.Any())
 {
     <div style="margin-top:0%; margin-bottom: 2%;" class="page-header4">
         <div class="container">
@@ -19,9 +23,12 @@
                                 <li style="animation-duration: 4s; color: #FFC312; font-weight: 1000;" class="a1">You don't have cars to repair...</li>
                             </ul>
                             <div class="container">
+
                                 <p>
                                     <a class="btn btn-warning font-weight-bold" asp-action="Create">Добави Автомобил...</a>
                                 </p>
+
+
                             </div>
                         </h1>
                     </div>
@@ -30,52 +37,71 @@
         </div>
     </div>
 }
-@if (Model.Any())
+@if (Model.CarsList.Any())
 {
     <div class="page-header3" style="margin-top: 0%; margin-bottom: 0%;">
         <div class="container-fluid">
             <div class="row ">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="container-fluid">
-                        <h2 class="text-light text-center ">Автомобили</h2>
-                        <a class="btn btn-warning mt-3 ml-3 font-weight-bold" asp-action="Create">Добави Автомобил...</a>
-                        <hr />
-                    </div>
-                    <div class="card-group">
-                        @foreach (var item in Model)
-                        {
-                            <div class="added-destinations">
-                                <a asp-action="Details" asp-route-id="@item.Id" class="added-destination">
-                                    <img src="@item.PictureUrl"
-                                         alt="" class="picture-added-destination">
-                                    <h3>@item.PlateNumber</h3>
-                                    <span>@item.Make @item.Model </span> <span>@item.Year</span>
 
-                                </a>
-                                @*<div>
-                                        <button class="btn btn-info" asp-controller="Repairs" asp-action="Index" asp-route-id="@item.Id">Repairs</button>
-                                        <a class="btn btn-info" asp-controller="Repairs" asp-action="Create" asp-route-id="@item.Id">RepairsCreate</a>
-                                    </div>*@
+                        <h2 class="text-light text-center ">Автомобили</h2>
+
+
+                        <div class="row">
+                            <div class="col-6">
+                                <a class="btn btn-warning mt-3 ml-3 font-weight-bold" asp-action="Create">Добави Автомобил...</a>
                             </div>
-                        }
+                            <div @*asp-action="Index" asp-controller="Cars"*@ class="col-6">
+                                <form   method="get">
+                                    <div class="row float-right mt-4 mr-5">
+                                        @*<input type="text" asp-for="SearchList" placeholder="Търсене..." />
+                                        <input asp-for="SearchList" type="submit" class="btn btn-primary d-none"/>*@
+                                        <label asp-for="SearchList"></label>
+                                        <input asp-for="SearchList" class="form-control" placeholder="BMW 640D, etc...">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
                     </div>
-                    @{
-                        var finish = Model.FirstOrDefault();
-                        var finishedRepairs = finish.FinishedRepairs;
-                        var allCars = finish.AllCars;
-                        var allClients = finish.AllClients;
-                    }
-                </div> <div style="margin-top: 0%; width: content-box;" class="page-caption1">
-                    <a class="btn btn-dark mt-3 ml-3 font-weight-bold" id="statistics-btn">Show...</a>
-                    <h1 class="page-title d-none" id="show">
-                        <ul class="a">
-                            <li style="animation-duration: 4s; color: #FFC312; font-weight: 1000;" class="a1"><span id="all-cars">@allCars</span> Автомобили със <span id="finished-repairs">@finishedRepairs</span> завършени Ремонти и <span id="all-clients">@allClients</span> Доволни Клиенти!</li>
-                        </ul>
-                    </h1>
+                    <hr />
                 </div>
+                <div class="card-group">
+                    @foreach (var item in Model.CarsList)
+                    {
+                        <div class="added-destinations">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="added-destination">
+                                <img src="@item.PictureUrl"
+                                     alt="" class="picture-added-destination">
+                                <h3>@item.PlateNumber</h3>
+                                <span>@item.Make @item.Model </span> <span>@item.Year</span>
+
+                            </a>
+                            @*<div>
+                                    <button class="btn btn-info" asp-controller="Repairs" asp-action="Index" asp-route-id="@item.Id">Repairs</button>
+                                    <a class="btn btn-info" asp-controller="Repairs" asp-action="Create" asp-route-id="@item.Id">RepairsCreate</a>
+                                </div>*@
+                        </div>
+                    }
+                </div>
+                @{
+                    var finish = Model.CarsList.FirstOrDefault();
+                    var finishedRepairs = finish.FinishedRepairs;
+                    var allCars = finish.AllCars;
+                    var allClients = finish.AllClients;
+                }
+            </div> <div style="margin-top: 0%; width: content-box;" class="page-caption1">
+                <a class="btn btn-dark mt-3 ml-3 font-weight-bold" id="statistics-btn">Show...</a>
+                <h1 class="page-title d-none" id="show">
+                    <ul class="a">
+                        <li style="animation-duration: 4s; color: #FFC312; font-weight: 1000;" class="a1"><span id="all-cars">@allCars</span> Автомобили със <span id="finished-repairs">@finishedRepairs</span> завършени Ремонти и <span id="all-clients">@allClients</span> Доволни Клиенти!</li>
+                    </ul>
+                </h1>
             </div>
         </div>
     </div>
+    @*</div>*@
 }
 
 

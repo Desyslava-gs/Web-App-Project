@@ -19,39 +19,52 @@ namespace WebApp.Controllers
         {
             this.data = data;
         }
-        public bool IsClient(string userId)
-        {
-            return  this.data
-                .Clients
-                .Any(u => u.UserId == userId);
-           
-        }
+
         // GET: Cars1
-        public IActionResult Index()
+        [Route("Cars/Index")]
+        public IActionResult Index([FromQuery] string search)
+
         {
+            var carsQuery = this.data.Cars.AsQueryable();
+            if (!string.IsNullOrEmpty(search))
+            {
+                carsQuery = carsQuery.Where(c =>
+                c.Make.ToLower().Contains(search.ToLower()) ||
+                c.Model.ToLower().Contains(search.ToLower()) ||
+                c.PlateNumber.ToLower().Contains(search.ToLower()));
+            }
+
+
             if (!IsClient(this.User.GetId()))
             {
                 return RedirectToAction("Index", "Clients");
             }
-            var userId = this.ClientId(this.User.GetId());
-            var car = this.data.Cars 
-                .Where(c => c.ClientId == userId)
-                .OrderBy(c => c.Repairs.Count())
-                .Select(c => new IndexCarAllViewModel
-                {
-                    Id = c.Id,
-                    Make = c.Make,
-                    Model = c.Model,
-                    PictureUrl = c.PictureUrl,
-                    PlateNumber = c.PlateNumber,
-                    Year = c.Year,
-                    FinishedRepairs = this.data.Repairs.Count(r => r.EndDate < DateTime.UtcNow),
-                    AllCars = this.data.Cars.Count(),
-                    AllClients = this.data.Clients.Count()
-                }).ToList();
 
-            return View(car);
-            
+            var userId = this.ClientId(this.User.GetId());
+
+            var car = carsQuery
+                 //  .Where(c => c.Make.ToLower().Contains("bmv".ToLower()))
+                 .Where(c => c.ClientId == userId /*&& c.Model=="BMV"*/)
+                 .OrderByDescending(c => c.Repairs.Count())
+                 .Select(c => new IndexCarAllViewModel
+                 {
+                     Id = c.Id,
+                     Make = c.Make,
+                     Model = c.Model,
+                     PictureUrl = c.PictureUrl,
+                     PlateNumber = c.PlateNumber,
+                     Year = c.Year,
+                     FinishedRepairs = this.data.Repairs.Count(r => r.EndDate < DateTime.UtcNow),
+                     AllCars = this.data.Cars.Count(),
+                     AllClients = this.data.Clients.Count()
+                 }).ToList();
+
+            return View(new AllCarsViewModel
+            {
+                CarsList = car.ToList(),
+                SearchList = search
+            });
+
         }
 
         //// GET: Cars1/Details/5
@@ -106,13 +119,7 @@ namespace WebApp.Controllers
 
         }
 
-        private bool UserIsClient()
-        {
-            var userId = this.User.GetId();
-            var userIsClient = this.data.Clients.Any(c => c.UserId == userId);
-            return userIsClient;
 
-        }
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -144,22 +151,15 @@ namespace WebApp.Controllers
                 Year = car.Year,
                 Repairs = new List<Repair>(),
                 ClientId = clientId
-              
+
             };
 
             this.data.Cars.Add(carData);
             this.data.SaveChanges();
             return RedirectToAction("Index", "Cars");
 
-        } 
-        public string ClientId(string userId)
-        { 
-            return this.data
-                .Clients
-                .Where(d => d.UserId == userId)
-                .Select(d => d.Id)
-                .FirstOrDefault();
         }
+
 
         [Authorize]
         public IActionResult Edit(string id)
@@ -299,7 +299,27 @@ namespace WebApp.Controllers
                     Name = ft.Name,
 
                 }).ToList();
+        }
+        private bool UserIsClient()
+        {
+            var userId = this.User.GetId();
+            var userIsClient = this.data.Clients.Any(c => c.UserId == userId);
+            return userIsClient;
+        }
+        public string ClientId(string userId)
+        {
+            return this.data
+                .Clients
+                .Where(d => d.UserId == userId)
+                .Select(d => d.Id)
+                .FirstOrDefault();
+        }
 
+        public bool IsClient(string userId)
+        {
+            return this.data
+                .Clients
+                .Any(u => u.UserId == userId);
 
         }
 
@@ -320,5 +340,9 @@ namespace WebApp.Controllers
 
         //    return uniqueFileName;
         //}
+        public IActionResult Error()
+        {
+            return View();
+        }
     }
 }

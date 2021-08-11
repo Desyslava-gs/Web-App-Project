@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Data;
 using WebApp.Data.Models;
@@ -15,7 +12,7 @@ namespace WebApp.Controllers
 {
     public class RepairsController : Controller
     {
-        private readonly CarRepairDbContext data;
+       private readonly CarRepairDbContext data;
         private readonly IRepairService repairService;
 
 
@@ -118,7 +115,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var repair = data.Repairs.Where(r => r.Id == id).FirstOrDefault();
+            var repair = repairService.GetRepairId(id);
 
             if (repair == null)
             {

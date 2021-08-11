@@ -15,6 +15,7 @@ using WebApp.Data;
 using WebApp.Data.Models;
 using WebApp.Infrastructure;
 using WebApp.Services.Repairs;
+using WebApp.Services.Statistics;
 
 namespace WebApp
 {
@@ -51,16 +52,18 @@ namespace WebApp
             services
                 .AddControllersWithViews();
 
+
+
             //Service 
             services.AddTransient<IRepairService, RepairService>();
-
+            services.AddTransient<IStatisticService, StatisticsService>();
 
             //FACEBOOK 
-            //services.AddAuthentication().AddFacebook(facebookOptions =>
-            //{
-            //    facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
-            //    facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-            //});
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+            });
 
         }
 
@@ -76,7 +79,6 @@ namespace WebApp
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
             app.UseHttpsRedirection()
@@ -87,6 +89,7 @@ namespace WebApp
                .UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
+             
                 endpoints.MapRazorPages();
 
 

@@ -16,6 +16,8 @@ namespace WebApp.Data
 
         }
 
+      
+
         public DbSet<Car> Cars { get; set; }
         public DbSet<FuelType> FuelTypes { get; set; }
         public DbSet<Repair> Repairs { get; set; }
@@ -23,6 +25,12 @@ namespace WebApp.Data
         public DbSet<Part> Parts { get; set; }
         public DbSet<Provider> Providers { get; set; }
         public DbSet<Client> Clients { get; set; }
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.EnableSensitiveDataLogging();
+        //}
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

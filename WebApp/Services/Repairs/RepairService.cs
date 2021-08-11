@@ -21,9 +21,7 @@ namespace WebApp.Services.Repairs
         public IEnumerable<IndexRepairAllViewModel> GetAllRepairsCars(string id)
         {
             return data.Repairs
-                //.Include(r => r.Car)
-                //.Include(r => r.RepairType)
-                //.OrderBy(c=>c.Repairs.Count())
+                .OrderBy(c=>c.Car.Repairs.Count())
                 .Where(c => c.Car.Id == id)
                 .Select(c => new IndexRepairAllViewModel
                 {
@@ -39,9 +37,9 @@ namespace WebApp.Services.Repairs
                 }).ToList();
         }
 
-        public Car GetCurrentId(string id)
+        public Repair GetRepairId(string id)
         {
-            return this.data.Cars.FirstOrDefault(x => x.Id == id);
+            return this. data.Repairs.Where(r => r.Id == id).FirstOrDefault();
         }
 
         public void CreateRepairs(CreateRepairFormModel repair, string id)
@@ -62,6 +60,24 @@ namespace WebApp.Services.Repairs
             this.data.Repairs.Add(repairData);
             this.data.SaveChanges();
         }
+        //public EditRepairFormModel GetEditRepairs( string id)
+        //{
+        //    var repairData = new EditRepairFormModel
+        //    {
+        //        RepairTypes = this.GetRepairTypes(),
+        //        RepairTypeId = repair.RepairTypeId,
+        //        Id = repair.Id,
+        //        Name = repair.Name,
+        //        Price = repair.Price,
+        //        CarId = repair.CarId,
+        //        StartDate = repair.StartDate,
+        //        EndDate = repair.EndDate,
+        //        Description = repair.Description,
+
+        //    };
+        //}
+
+
         public IEnumerable<RepairTypeViewModel> GetRepairTypes()
         {
             return data
