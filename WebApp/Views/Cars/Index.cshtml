@@ -6,8 +6,6 @@
 }
 
 
-
-
 @if (!Model.CarsList.Any())
 {
     <div style="margin-top:0%; margin-bottom: 2%;" class="page-header4">
@@ -22,14 +20,14 @@
                             <ul class="a">
                                 <li style="animation-duration: 4s; color: #FFC312; font-weight: 1000;" class="a1">You don't have cars to repair...</li>
                             </ul>
-                            <div class="container">
-
-                                <p>
-                                    <a class="btn btn-warning font-weight-bold" asp-action="Create">Добави Автомобил...</a>
-                                </p>
-
-
-                            </div>
+                            @if (Model.SearchList == null)
+                            {
+                                <div class="container">
+                                    <p>
+                                        <a class="btn btn-warning font-weight-bold" asp-action="Create">Добави Автомобил...</a>
+                                    </p>
+                                </div>
+                            }
                         </h1>
                     </div>
                 </div>
@@ -47,23 +45,22 @@
 
                         <h2 class="text-light text-center ">Автомобили</h2>
 
-
                         <div class="row">
                             <div class="col-6">
                                 <a class="btn btn-warning mt-3 ml-3 font-weight-bold" asp-action="Create">Добави Автомобил...</a>
                             </div>
-                            <div @*asp-action="Index" asp-controller="Cars"*@ class="col-6">
-                                <form   method="get">
+                            <div class="col-6">
+
+                                <form asp-controller="Cars" asp-action="Index" method="get">
                                     <div class="row float-right mt-4 mr-5">
-                                        @*<input type="text" asp-for="SearchList" placeholder="Търсене..." />
-                                        <input asp-for="SearchList" type="submit" class="btn btn-primary d-none"/>*@
-                                        <label asp-for="SearchList"></label>
-                                        <input asp-for="SearchList" class="form-control" placeholder="BMW 640D, etc...">
+                                        <p>
+                                            <input type="text" name="search" placeholder="Търсене... " />
+                                            <input type="submit" value="Filter" class="btn btn-primary d-none" />
+                                        </p>
                                     </div>
                                 </form>
                             </div>
                         </div>
-
                     </div>
                     <hr />
                 </div>

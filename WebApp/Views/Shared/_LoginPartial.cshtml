@@ -1,13 +1,23 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using WebApp.Infrastructure
+@using WebApp.Services.Clients
+
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
-
+@inject IClientService ClientService
 
 @if (SignInManager.IsSignedIn(User))
 {
+    var userId = User.GetId();
+    var userIsClient = ClientService.IsClient(userId);
 
     <a class="navbar-item" asp-area="" asp-controller="Cars" asp-action="Index">Автомобили</a>
-    <a class="navbar-item" asp-area="" asp-controller="Clients" asp-action="Index">Стани Клиент</a>
+
+    @*@if (!userIsClient)
+    {
+        <a class="navbar-item" asp-area="" asp-controller="Clients" asp-action="Index">Стани Клиент</a>
+    }*@
+
 
     <form class="navbar-nav float-right" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
         <button type="submit" class="btn btn-warning">Logout</button>

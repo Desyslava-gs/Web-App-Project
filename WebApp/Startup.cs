@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using WebApp.Data;
 using WebApp.Data.Models;
 using WebApp.Infrastructure;
+using WebApp.Services.Clients;
 using WebApp.Services.Repairs;
 using WebApp.Services.Statistics;
 
@@ -57,6 +58,7 @@ namespace WebApp
             //Service 
             services.AddTransient<IRepairService, RepairService>();
             services.AddTransient<IStatisticService, StatisticsService>();
+            services.AddTransient<IClientService, ClientService>();
 
             //FACEBOOK 
             services.AddAuthentication().AddFacebook(facebookOptions =>

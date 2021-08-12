@@ -31,6 +31,7 @@ namespace WebApp.Controllers
                 carsQuery = carsQuery.Where(c =>
                 c.Make.ToLower().Contains(search.ToLower()) ||
                 c.Model.ToLower().Contains(search.ToLower()) ||
+                c.Year.ToString().Contains(search.ToLower()) ||
                 c.PlateNumber.ToLower().Contains(search.ToLower()));
             }
 
@@ -43,8 +44,7 @@ namespace WebApp.Controllers
             var userId = this.ClientId(this.User.GetId());
 
             var car = carsQuery
-                 //  .Where(c => c.Make.ToLower().Contains("bmv".ToLower()))
-                 .Where(c => c.ClientId == userId /*&& c.Model=="BMV"*/)
+                .Where(c => c.ClientId == userId)
                  .OrderByDescending(c => c.Repairs.Count())
                  .Select(c => new IndexCarAllViewModel
                  {
@@ -66,6 +66,8 @@ namespace WebApp.Controllers
             });
 
         }
+
+
 
         //// GET: Cars1/Details/5
         public IActionResult Details(string id)
