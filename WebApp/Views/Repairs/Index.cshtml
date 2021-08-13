@@ -4,15 +4,17 @@
     ViewData["Title"] = "Index";
     var first =  Model.ToList().FirstOrDefault();
     var carID = first.CarId;
-
+    var IsAdmin = User.IsInRole(WebConstants.AdminRoleName);
 }
 
 <div>
     <div class="container-fluid">
         <h2 class="text-center ">Ремонти</h2>
         <h2 class="text-center ">@first.CarTitle</h2>
+        @if(IsAdmin)
+        {
         <a class="btn btn-warning mt-3 ml-3 font-weight-bold" asp-controller="Repairs" asp-action="Create"  asp-route-id="@carID">Добави Ремонт... </a>
-
+        }
         <hr />
     </div>
 
@@ -71,12 +73,17 @@
                         <td hidden="">
                             @item.CarId
                         </td>
+                      
 
+                       
                         <td>
-                            <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                            <a class="btn btn-info"  asp-action="Details" asp-route-id="@item.Id">Details</a> 
-                            
+                            @if (IsAdmin)
+                            {
+                                <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            }   
+                            <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
+
                         </td>
                     </tr>
                 }

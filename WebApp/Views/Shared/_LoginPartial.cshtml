@@ -8,14 +8,15 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    var userId = User.GetId();
-    var userIsClient = ClientService.IsClient(userId);
+    //var userId = User.GetId();
+    //var userIsClient = ClientService.IsClient(userId);
+    var IsAdmin = User.IsInRole(WebConstants.AdminRoleName);
 
     <a class="navbar-item" asp-area="" asp-controller="Cars" asp-action="Index">Автомобили</a>
 
-    @*@if (!userIsClient)
+    @*@if (IsAdmin)
     {
-        <a class="navbar-item" asp-area="" asp-controller="Clients" asp-action="Index">Стани Клиент</a>
+        <a class="navbar-item" asp-area="" asp-controller="Repairs" asp-action="IndexAdmin">Ремонти</a>
     }*@
 
 

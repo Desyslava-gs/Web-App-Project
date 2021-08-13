@@ -13,7 +13,7 @@ namespace WebApp.Controllers
 {
     public class RepairsController : Controller
     {
-       private readonly CarRepairDbContext data;
+        private readonly CarRepairDbContext data;
         private readonly IRepairService repairService;
 
 
@@ -25,7 +25,37 @@ namespace WebApp.Controllers
             this.repairService = repairService;
         }
 
+        //public IActionResult IndexAdmin()
+        //{
 
+        //    var repairs = data.Repairs
+        //        .OrderBy(c => c.Car.Repairs.Count())
+        //        .Select(c => new IndexRepairAllViewModel
+        //        {
+        //            Id = c.Id,
+        //            Name = c.Name,
+        //            Price = c.Price,
+        //            StartDate = c.StartDate,
+        //            CarId = c.CarId,
+        //            EndDate = c.EndDate,
+        //            Description = c.Description,
+        //            RepairTypeId = c.RepairType.Name,
+        //            CarTitle = c.Car.Make + " " + c.Car.Model
+        //        }).ToList();
+        //    //if (!repairs.Any())
+        //    //{
+        //    //    return RedirectToAction("Non");
+        //    //    // return RedirectToAction("Create", "Repairs", new { id });
+        //    //}
+        //    return View(repairs);
+
+        //}
+
+
+        public IActionResult Non()
+        {
+            return View();
+        }
 
         public IActionResult Index(string id)
         {
@@ -33,6 +63,10 @@ namespace WebApp.Controllers
             var repairs = repairService.GetAllRepairsCars(id);
             if (!repairs.Any())
             {
+                if (!UserIsAdmin())
+                {
+                    return RedirectToAction("Non");
+                }
                 return RedirectToAction("Create", "Repairs", new { id });
             }
             return View(repairs);
@@ -51,8 +85,8 @@ namespace WebApp.Controllers
                 .Where(m => m.Id == id)
                 .Select(c => new DetailsRepairViewModel
                 {
-                    Id =c.Id,
-                    CarTitle = c.Car.Make+" "+c.Car.Model+ " "+c.Car.Year,
+                    Id = c.Id,
+                    CarTitle = c.Car.Make + " " + c.Car.Model + " " + c.Car.Year,
                     Description = c.Description,
                     StartDate = c.StartDate.ToString(),
                     EndDate = c.EndDate.ToString(),
@@ -61,8 +95,8 @@ namespace WebApp.Controllers
                     Price = c.Price,
                     CarId = c.CarId,
                     RepairTypeId = c.RepairType.Name,
-                    Parts = new List<Part> {}
-                    
+                    Parts = new List<Part> { }
+
                 }).ToList()
                 .FirstOrDefault();
             if (repair == null)
@@ -74,7 +108,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Repairs/Create
-        [Authorize (Roles = WebConstants.AdminRoleName)]
+        [Authorize(Roles = WebConstants.AdminRoleName)]
         public IActionResult Create([FromRoute] string id)
         {
             //if (string.IsNullOrEmpty(id)) throw new ArgumentException("Value cannot be null or empty.", nameof(id));
@@ -89,7 +123,7 @@ namespace WebApp.Controllers
 
         // POST: Repairs/Create
         [HttpPost]
-        [Authorize (Roles = WebConstants.AdminRoleName)]
+        [Authorize(Roles = WebConstants.AdminRoleName)]
         [ValidateAntiForgeryToken]
         public IActionResult Create(CreateRepairFormModel repair, string id)
         {
@@ -111,7 +145,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Repairs/Edit/5
-        [Authorize (Roles = WebConstants.AdminRoleName)]
+        [Authorize(Roles = WebConstants.AdminRoleName)]
         public IActionResult Edit(string id)
         {
             if (id == null)
@@ -144,7 +178,7 @@ namespace WebApp.Controllers
         // POST: Repairs/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize (Roles = WebConstants.AdminRoleName)]
+        [Authorize(Roles = WebConstants.AdminRoleName)]
         public IActionResult Edit(string id, EditRepairFormModel repair)
         {
             if (id != repair.Id)
@@ -190,7 +224,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Repairs/Delete/5
-        [Authorize (Roles = WebConstants.AdminRoleName)]
+        [Authorize(Roles = WebConstants.AdminRoleName)]
         public IActionResult Delete(string id)
         {
             if (id == null)
@@ -198,8 +232,8 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var repair =  data.Repairs
-                .Select(r=> new DeleteRepairViewModel
+            var repair = data.Repairs
+                .Select(r => new DeleteRepairViewModel
                 {
                     Name = r.Name,
                     Price = r.Price,
@@ -221,18 +255,23 @@ namespace WebApp.Controllers
 
         // POST: Repairs/Delete/5
         [HttpPost, ActionName("Delete")]
-        [Authorize (Roles = WebConstants.AdminRoleName)]
+        [Authorize(Roles = WebConstants.AdminRoleName)]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(string id)
         {
-          
+
             var repair = data.Repairs.Find(id);
             id = repair.CarId;
-            data.Repairs.Remove(repair); 
+            data.Repairs.Remove(repair);
             data.SaveChanges();
-            return RedirectToAction("Index", "Repairs",new{id});
+            return RedirectToAction("Index", "Repairs", new { id });
         }
 
+        private bool UserIsAdmin()
+        {
+            var userInRole = this.User.IsInRole(WebConstants.AdminRoleName);
 
+            return userInRole;
+        }
     }
 }

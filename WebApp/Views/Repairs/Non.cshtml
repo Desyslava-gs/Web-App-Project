@@ -1,0 +1,38 @@
+﻿@model IEnumerable<IndexRepairAllViewModel>
+@{
+    //if (Model!=null)
+    //{
+    //    var first = Model.ToList().Any(x=>x.CarId);
+    //    var carID = first.CarId;
+    //}
+
+    var IsAdmin = User.IsInRole(WebConstants.AdminRoleName);
+}
+
+<div style="margin-top:0%; margin-bottom: 2%;" class="page-header4">
+    <div class="container">
+        <h2 class="text-center text-light">Автомобили </h2>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div style="margin-top: 3%; width:max-content; " class="page-caption1">
+                    <h1 class="page-title">
+                        <ul class="a">
+                            <li style="animation-duration: 4s; color: #FFC312; font-weight: 1000;" class="a1">You don't have repairs to this car...</li>
+                        </ul>
+                        <div class="container">
+                            <p>
+                                @if (IsAdmin)
+                                {
+                                   // <a class="btn btn-warning mt-3 ml-3 font-weight-bold" asp-controller="Repairs" asp-action="Create" asp-route-id="@carID">Добави Ремонт... </a>
+
+                                }
+                            </p>
+                        </div>
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

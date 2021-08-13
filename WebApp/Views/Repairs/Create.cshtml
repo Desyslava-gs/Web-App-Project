@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
+    var IsAdmin = User.IsInRole(WebConstants.AdminRoleName);
 }
 
 <div class="container">
@@ -63,6 +64,7 @@
                             <option value="@item.Id">@item.Name</option>
                         }
                     </select>
+                  </div>
                       @*<span asp-validation-for="CarId" class="text-danger"></span>
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
@@ -70,7 +72,7 @@
                             </div>
                             <select asp-for="CarId" class="form-control" asp-items="ViewBag.Car.Id"></select>
                         </div>*@
-                </div>
+                
                 <div class="float-right">
                     <input type="submit" value="Create" class="btn btn-warning" />
                 </div>
