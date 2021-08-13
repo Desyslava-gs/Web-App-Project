@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Details";
+    var IsAdmin = User.IsInRole(WebConstants.AdminRoleName);
 }
 
 <div class="container">
@@ -58,7 +59,10 @@
 </div>
 <div class="text-center overflow-hidden">
     <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+    @if (IsAdmin)
+    {
+        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+    }
     <a class="btn btn-info" asp-controller="Repairs" asp-action="Index" asp-route-id="@Model.Id">Repairs</a>
     @*<a class="btn btn-info" asp-controller="Repairs" asp-action="Create" asp-route-id="@Model.Id">RepairsCreate</a>*@
 </div>

@@ -10,14 +10,14 @@
 {
     //var userId = User.GetId();
     //var userIsClient = ClientService.IsClient(userId);
-    var IsAdmin = User.IsInRole(WebConstants.AdminRoleName);
+    // var IsAdmin = User.IsInRole(WebConstants.AdminRoleName);
 
     <a class="navbar-item" asp-area="" asp-controller="Cars" asp-action="Index">Автомобили</a>
 
     @*@if (IsAdmin)
-    {
-        <a class="navbar-item" asp-area="" asp-controller="Repairs" asp-action="IndexAdmin">Ремонти</a>
-    }*@
+        {
+            <a class="navbar-item" asp-area="" asp-controller="Repairs" asp-action="IndexAdmin">Ремонти</a>
+        }*@
 
 
     <form class="navbar-nav float-right" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
@@ -26,8 +26,6 @@
     <li class="navbar-nav float-right">
         <a class="nav-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"> @User.Identity.Name!</a>
     </li>
-
-
 }
 else
 {
