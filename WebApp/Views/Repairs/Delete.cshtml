@@ -58,6 +58,6 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a class="float-right" asp-action="Index" asp-route-id="@Model.Id">Go to Back</a>
+        <a class="float-right" asp-controller="Repairs" asp-action="Index" asp-route-id="@Model.CarId">Go to Back</a>
     </form>
 </div>
