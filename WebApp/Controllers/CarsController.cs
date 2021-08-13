@@ -36,16 +36,19 @@ namespace WebApp.Controllers
             }
 
 
-            if (!IsClient(this.User.GetId()))
+            if (!IsClient(this.User.GetId())&& !UserIsAdmin())
             {
                 return RedirectToAction("Index", "Clients");
             }
 
-            var userId = this.ClientId(this.User.GetId());
+            if (IsClient(this.User.GetId()))
+            {
+                var userId = this.ClientId(this.User.GetId());
+                carsQuery = carsQuery.Where(c => c.ClientId == userId);
+            }
 
             var car = carsQuery
-                .Where(c => c.ClientId == userId)
-                 .OrderByDescending(c => c.Repairs.Count())
+                .OrderByDescending(c => c.Repairs.Count())
                  .Select(c => new IndexCarAllViewModel
                  {
                      Id = c.Id,
@@ -76,7 +79,7 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            if (!UserIsClient())
+            if (!UserIsClient()&&!UserIsAdmin())
             {
                 return RedirectToAction("Index", "Cars");
             }
@@ -110,7 +113,7 @@ namespace WebApp.Controllers
         [Authorize]
         public IActionResult Create()
         {
-            if (!this.UserIsClient())
+            if (!this.UserIsClient()&&!UserIsAdmin())
             {
                 return RedirectToAction("Index", "Clients");
             }
@@ -308,6 +311,13 @@ namespace WebApp.Controllers
             var userIsClient = this.data.Clients.Any(c => c.UserId == userId);
             return userIsClient;
         }
+        private bool UserIsAdmin()
+        {
+            var userInRole = this.User.IsInRole(WebConstants.AdminRoleName);
+          
+            return userInRole;
+        }
+
         public string ClientId(string userId)
         {
             return this.data

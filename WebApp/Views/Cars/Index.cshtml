@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
-
+    var IsAdmin = User.IsInRole(WebConstants.AdminRoleName);
 }
 
 
@@ -44,18 +44,23 @@
                     <div class="container-fluid">
 
                         <h2 class="text-light text-center ">Автомобили</h2>
-
+                       
                         <div class="row">
+                       
                             <div class="col-6">
-                                <a class="btn btn-warning mt-3 ml-3 font-weight-bold" asp-action="Create">Добави Автомобил...</a>
-                            </div>
+                                @if (!IsAdmin)
+                                {
+                                    <a class="btn btn-warning mt-3 ml-3 font-weight-bold" asp-action="Create">Добави Автомобил...</a>
+                                }    
+                                </div>
+                        
                             <div class="col-6">
 
                                 <form asp-controller="Cars" asp-action="Index" method="get">
                                     <div class="row float-right mt-4 mr-5">
                                         <p>
-                                            <input type="text" name="search" placeholder="Търсене... " />
-                                            <input type="submit" value="Filter" class="btn btn-primary d-none" />
+                                            <input type="text" name="search" placeholder="Търсене... "/>
+                                            <input type="submit" value="Filter" class="btn btn-primary d-none"/>
                                         </p>
                                     </div>
                                 </form>

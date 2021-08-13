@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Data;
@@ -73,6 +74,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Repairs/Create
+        [Authorize (Roles = WebConstants.AdminRoleName)]
         public IActionResult Create([FromRoute] string id)
         {
             //if (string.IsNullOrEmpty(id)) throw new ArgumentException("Value cannot be null or empty.", nameof(id));
@@ -87,6 +89,7 @@ namespace WebApp.Controllers
 
         // POST: Repairs/Create
         [HttpPost]
+        [Authorize (Roles = WebConstants.AdminRoleName)]
         [ValidateAntiForgeryToken]
         public IActionResult Create(CreateRepairFormModel repair, string id)
         {
@@ -108,6 +111,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Repairs/Edit/5
+        [Authorize (Roles = WebConstants.AdminRoleName)]
         public IActionResult Edit(string id)
         {
             if (id == null)
@@ -140,6 +144,7 @@ namespace WebApp.Controllers
         // POST: Repairs/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize (Roles = WebConstants.AdminRoleName)]
         public IActionResult Edit(string id, EditRepairFormModel repair)
         {
             if (id != repair.Id)
@@ -185,6 +190,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Repairs/Delete/5
+        [Authorize (Roles = WebConstants.AdminRoleName)]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -206,6 +212,7 @@ namespace WebApp.Controllers
 
         // POST: Repairs/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize (Roles = WebConstants.AdminRoleName)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
