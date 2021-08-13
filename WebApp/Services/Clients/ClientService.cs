@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using WebApp.Data;
 
 namespace WebApp.Services.Clients
@@ -20,5 +17,6 @@ namespace WebApp.Services.Clients
             return this.data.Clients.Any(c => c.UserId == uid);
 
         }
+
     }
 }

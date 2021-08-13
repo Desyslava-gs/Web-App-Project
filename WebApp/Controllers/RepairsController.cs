@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +26,6 @@ namespace WebApp.Controllers
 
         //public IActionResult IndexAdmin()
         //{
-
         //    var repairs = data.Repairs
         //        .OrderBy(c => c.Car.Repairs.Count())
         //        .Select(c => new IndexRepairAllViewModel
@@ -48,7 +46,6 @@ namespace WebApp.Controllers
         //    //    // return RedirectToAction("Create", "Repairs", new { id });
         //    //}
         //    return View(repairs);
-
         //}
 
 
@@ -60,11 +57,12 @@ namespace WebApp.Controllers
         public IActionResult Index(string id)
         {
 
-            var repairs = repairService.GetAllRepairsCars(id);
+            var repairs = repairService.AllRepairsForCar(id);
             if (!repairs.Any())
             {
                 if (!UserIsAdmin())
-                {
+                {    
+                    //return Unauthorized();
                     return RedirectToAction("Non");
                 }
                 return RedirectToAction("Create", "Repairs", new { id });
@@ -95,6 +93,7 @@ namespace WebApp.Controllers
                     Price = c.Price,
                     CarId = c.CarId,
                     RepairTypeId = c.RepairType.Name,
+                    PartName = "",
                     Parts = new List<Part> { }
 
                 }).ToList()
@@ -139,7 +138,7 @@ namespace WebApp.Controllers
                 return View(repair);
             }
 
-            this.repairService.CreateRepairs(repair, id);
+            this.repairService.CreateRepair(repair, id);
 
             return RedirectToAction("Index", "Repairs", new { id });
         }

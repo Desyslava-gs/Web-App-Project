@@ -38,6 +38,8 @@ namespace WebApp.Models.Repairs
 
         public string RepairTypeId { get; init; }
 
+        [Display(Name = "Части")]
+        public  string PartName { get; set; }
         public IEnumerable<Part> Parts { get; set; }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Data.Models;
 
@@ -15,9 +11,7 @@ namespace WebApp.Data
         {
 
         }
-
-      
-
+        
         public DbSet<Car> Cars { get; set; }
         public DbSet<FuelType> FuelTypes { get; set; }
         public DbSet<Repair> Repairs { get; set; }

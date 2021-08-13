@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace WebApp.Data
+﻿namespace WebApp.Data
 {
     public class DataConstants
     {

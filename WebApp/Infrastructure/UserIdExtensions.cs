@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
+using static WebApp.WebConstants;
 
 namespace WebApp.Infrastructure
 {
@@ -12,9 +12,9 @@ namespace WebApp.Infrastructure
         {
             return user.FindFirst(ClaimTypes.NameIdentifier).Value;
         }
-            
 
-        //public static bool IsAdmin(this ClaimsPrincipal user)
-        //    => user.IsInRole(AdministratorRoleName);
+
+        public static bool IsAdmin(this ClaimsPrincipal user)
+            => user.IsInRole(AdminRoleName);
     }
 }

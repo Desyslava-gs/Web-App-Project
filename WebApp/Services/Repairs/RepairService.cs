@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using WebApp.Models.Repairs;
 using WebApp.Data;
 using WebApp.Data.Models;
@@ -18,7 +16,7 @@ namespace WebApp.Services.Repairs
             this.data = data;
         }
 
-        public IEnumerable<IndexRepairAllViewModel> GetAllRepairsCars(string id)
+        public IEnumerable<IndexRepairAllViewModel>AllRepairsForCar(string id)
         {
             return data.Repairs
                 .OrderBy(c=>c.Car.Repairs.Count())
@@ -42,7 +40,7 @@ namespace WebApp.Services.Repairs
             return this. data.Repairs.Where(r => r.Id == id).FirstOrDefault();
         }
 
-        public void CreateRepairs(CreateRepairFormModel repair, string id)
+        public void CreateRepair(CreateRepairFormModel repair, string id)
         {
             var repairData = new Repair()
             {
@@ -60,9 +58,9 @@ namespace WebApp.Services.Repairs
             this.data.Repairs.Add(repairData);
             this.data.SaveChanges();
         }
-        //public EditRepairFormModel GetEditRepairs( string id)
+        //public bool EditRepairs(string id)
         //{
-        //    var repairData = new EditRepairFormModel
+        //    var repair= new EditRepairFormModel
         //    {
         //        RepairTypes = this.GetRepairTypes(),
         //        RepairTypeId = repair.RepairTypeId,
