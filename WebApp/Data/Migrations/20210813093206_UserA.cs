@@ -3,10 +3,23 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApp.Data.Migrations
 {
-    public partial class AfterDeleteAllMigration : Migration
+    public partial class UserA : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<string>(
+                name: "ClientId",
+                table: "AspNetUsers",
+                type: "nvarchar(max)",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "NameUser",
+                table: "AspNetUsers",
+                type: "nvarchar(45)",
+                maxLength: 45,
+                nullable: true);
+
             migrationBuilder.CreateTable(
                 name: "Clients",
                 columns: table => new
@@ -14,7 +27,8 @@ namespace WebApp.Data.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -22,6 +36,12 @@ namespace WebApp.Data.Migrations
                     table.ForeignKey(
                         name: "FK_Clients_AspNetUsers_UserId",
                         column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Clients_AspNetUsers_UserId1",
+                        column: x => x.UserId1,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -176,6 +196,11 @@ namespace WebApp.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Clients_UserId1",
+                table: "Clients",
+                column: "UserId1");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Parts_ProviderId",
                 table: "Parts",
                 column: "ProviderId");
@@ -218,6 +243,14 @@ namespace WebApp.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "FuelTypes");
+
+            migrationBuilder.DropColumn(
+                name: "ClientId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "NameUser",
+                table: "AspNetUsers");
         }
     }
 }

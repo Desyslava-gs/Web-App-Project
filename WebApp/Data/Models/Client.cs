@@ -20,6 +20,8 @@ namespace WebApp.Data.Models
         [Required]
         public string UserId { get; set; }
 
+        public User User { get; set; }
+
         public IEnumerable<Car> Cars { get; init; } = new List<Car>();
     }
 }

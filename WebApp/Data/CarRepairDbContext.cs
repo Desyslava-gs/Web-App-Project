@@ -8,7 +8,7 @@ using WebApp.Data.Models;
 
 namespace WebApp.Data
 {
-    public class CarRepairDbContext : IdentityDbContext
+    public class CarRepairDbContext : IdentityDbContext<User>
     {
         public CarRepairDbContext(DbContextOptions<CarRepairDbContext> options)
             : base(options)
@@ -72,7 +72,7 @@ namespace WebApp.Data
                 .OnDelete(deleteBehavior:DeleteBehavior.Restrict);
             builder
                 .Entity<Client>()
-                .HasOne<IdentityUser>()
+                .HasOne<User>()
                 .WithOne()
                 .HasForeignKey<Client>(d => d.UserId)
                 .OnDelete(DeleteBehavior.Restrict);

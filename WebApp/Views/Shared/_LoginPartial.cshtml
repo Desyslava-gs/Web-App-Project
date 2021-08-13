@@ -1,9 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@using WebApp.Infrastructure
+@using WebApp.Data.Models
 @using WebApp.Services.Clients
 
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 @inject IClientService ClientService
 
 @if (SignInManager.IsSignedIn(User))

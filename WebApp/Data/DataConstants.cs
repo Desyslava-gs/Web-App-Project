@@ -63,6 +63,11 @@ namespace WebApp.Data
             public const int NameMaxLength = 20;
             public const int PhoneNumberMaxLength = 20;
 
+        }   
+        public class User
+        {
+            public const int UserNameMaxLength = 45;
+            public const int UserNameMinLength = 3;
         }
        
     }

@@ -40,7 +40,8 @@
     <a asp-page="./Disable2fa" class="btn btn-default">Disable 2FA</a>
     <a asp-page="./GenerateRecoveryCodes" class="btn btn-default">Reset recovery codes</a>
 }
-<h5 style="line-height: 20px">Authenticator app</h5>
+
+<h5>Authenticator app</h5>
 @if (!Model.HasAuthenticator)
 {
     <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-default">Add authenticator app</a>
