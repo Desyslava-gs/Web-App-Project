@@ -31,9 +31,9 @@ namespace WebApp.Controllers
         {
 
             var repairs = repairService.GetAllRepairsCars(id);
-            if (repairs.Count() == 0)
+            if (!repairs.Any())
             {
-                return RedirectToAction("Create", "Repairs", new{id});
+                return RedirectToAction("Create", "Repairs", new { id });
             }
             return View(repairs);
 
@@ -191,17 +191,26 @@ namespace WebApp.Controllers
 
         // GET: Repairs/Delete/5
         [Authorize (Roles = WebConstants.AdminRoleName)]
-        public async Task<IActionResult> Delete(string id)
+        public IActionResult Delete(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var repair = await data.Repairs
-                .Include(r => r.Car)
-                .Include(r => r.RepairType)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var repair =  data.Repairs
+                .Select(r=> new DeleteRepairViewModel
+                {
+                    Name = r.Name,
+                    Price = r.Price,
+                    StartDate = r.StartDate.ToString(),
+                    EndDate = r.EndDate.ToString(),
+                    Description = r.Description,
+                    CarId = r.CarId,
+                    Id = r.Id
+
+                }).ToList()
+                .FirstOrDefault(m => m.Id == id);
             if (repair == null)
             {
                 return NotFound();
@@ -214,12 +223,14 @@ namespace WebApp.Controllers
         [HttpPost, ActionName("Delete")]
         [Authorize (Roles = WebConstants.AdminRoleName)]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public IActionResult DeleteConfirmed(string id)
         {
-            var repair = await data.Repairs.FindAsync(id);
-            data.Repairs.Remove(repair);
-            await data.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+          
+            var repair = data.Repairs.Find(id);
+            id = repair.CarId;
+            data.Repairs.Remove(repair); 
+            data.SaveChanges();
+            return RedirectToAction("Index", "Repairs",new{id});
         }
 
 
