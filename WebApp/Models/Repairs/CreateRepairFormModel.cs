@@ -19,8 +19,7 @@ namespace WebApp.Models.Repairs
         public decimal Price { get; set; }
 
         public DateTime? StartDate { get; set; }
-
-        //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        
         public DateTime? EndDate { get; set; }
 
         public string Description { get; set; }
@@ -28,7 +27,7 @@ namespace WebApp.Models.Repairs
         public string CarId { get; set; }
 
         public string RepairTypeId { get; init; }
-        [Required]
+
         public IEnumerable<RepairTypeViewModel> RepairTypes { get; set; }
     }
 }
