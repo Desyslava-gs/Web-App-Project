@@ -16,5 +16,12 @@ namespace WebApp.Infrastructure
 
         public static bool IsAdmin(this ClaimsPrincipal user)
             => user.IsInRole(AdminRoleName);
+
+        //public bool UserIsAdmin()
+        //{
+        //    var userInRole = this.User.IsInRole(WebConstants.AdminRoleName);
+
+        //    return userInRole;
+        //}
     }
 }

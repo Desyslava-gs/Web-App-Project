@@ -1,26 +1,22 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebApp.Data;
-using WebApp.Data.Models;
+using WebApp.Infrastructure;
 using WebApp.Models.Repairs;
 using WebApp.Services.Repairs;
+using static WebApp.WebConstants;
 
 namespace WebApp.Controllers
 {
     public class RepairsController : Controller
     {
-        private readonly CarRepairDbContext data;
+
         private readonly IRepairService repairService;
 
 
-        public RepairsController(
-            CarRepairDbContext data,
-            IRepairService repairService)
+        public RepairsController(IRepairService repairService)
         {
-            this.data = data;
             this.repairService = repairService;
         }
 
@@ -60,18 +56,12 @@ namespace WebApp.Controllers
             var repairs = repairService.AllRepairsForCar(id);
             if (!repairs.Any())
             {
-                if (!UserIsAdmin())
-                {    
-                    //return Unauthorized();
-                    return RedirectToAction("Non");
-                }
-                return RedirectToAction("Create", "Repairs", new { id });
+                return !this.User.IsAdmin() ? RedirectToAction("Non") : RedirectToAction("Create", "Repairs", new { id });
             }
             return View(repairs);
 
         }
 
-        // GET: Repairs/Details/5
         public IActionResult Details(string id)
         {
             if (id == null)
@@ -79,25 +69,8 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var repair = this.data.Repairs
-                .Where(m => m.Id == id)
-                .Select(c => new DetailsRepairViewModel
-                {
-                    Id = c.Id,
-                    CarTitle = c.Car.Make + " " + c.Car.Model + " " + c.Car.Year,
-                    Description = c.Description,
-                    StartDate = c.StartDate.ToString(),
-                    EndDate = c.EndDate.ToString(),
-                    Name = c.Name,
-                    PictureUrl = c.Car.PictureUrl,
-                    Price = c.Price,
-                    CarId = c.CarId,
-                    RepairTypeId = c.RepairType.Name,
-                    PartName = "",
-                    Parts = new List<Part> { }
+            var repair = repairService.DetailsRepair(id);
 
-                }).ToList()
-                .FirstOrDefault();
             if (repair == null)
             {
                 return NotFound();
@@ -106,11 +79,9 @@ namespace WebApp.Controllers
             return View(repair);
         }
 
-        // GET: Repairs/Create
-        [Authorize(Roles = WebConstants.AdminRoleName)]
+        [Authorize(Roles = AdminRoleName)]
         public IActionResult Create([FromRoute] string id)
         {
-            //if (string.IsNullOrEmpty(id)) throw new ArgumentException("Value cannot be null or empty.", nameof(id));
             var repairs = new CreateRepairFormModel
             {
                 CarId = id,
@@ -119,10 +90,8 @@ namespace WebApp.Controllers
             return View(repairs);
         }
 
-
-        // POST: Repairs/Create
         [HttpPost]
-        [Authorize(Roles = WebConstants.AdminRoleName)]
+        [Authorize(Roles = AdminRoleName)]
         [ValidateAntiForgeryToken]
         public IActionResult Create(CreateRepairFormModel repair, string id)
         {
@@ -138,13 +107,12 @@ namespace WebApp.Controllers
                 return View(repair);
             }
 
-            this.repairService.CreateRepair(repair, id);
+            this.repairService.CreateRepairs(repair, id);
 
             return RedirectToAction("Index", "Repairs", new { id });
         }
 
-        // GET: Repairs/Edit/5
-        [Authorize(Roles = WebConstants.AdminRoleName)]
+        [Authorize(Roles = AdminRoleName)]
         public IActionResult Edit(string id)
         {
             if (id == null)
@@ -158,6 +126,7 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
+
             var repairData = new EditRepairFormModel
             {
                 RepairTypes = repairService.GetRepairTypes(),
@@ -174,7 +143,6 @@ namespace WebApp.Controllers
             return View(repairData);
         }
 
-        // POST: Repairs/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = WebConstants.AdminRoleName)]
@@ -185,45 +153,24 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(repair);
+            try
             {
-                try
+                this.repairService.EditRepairs(id, repair);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!repairService.RepairExists(repair.Id))
                 {
-                    var repairData = new Repair
-                    {
-                        Id = repair.Id,
-                        Name = repair.Name,
-                        Price = repair.Price,
-                        StartDate = repair.StartDate,
-                        EndDate = repair.EndDate,
-                        Description = repair.Description,
-                        CarId = repair.CarId,
-                        RepairTypeId = repair.RepairTypeId,
-                        Parts = new List<Part>(),
-                    };
-                    data.Update(repairData);
-                    data.SaveChanges();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!repairService.RepairExists(repair.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return NotFound();
                 }
 
-                id = repair.CarId;
-                return RedirectToAction("Index", new { id });
             }
-            return View(repair);
+            id = repair.CarId;
+            return RedirectToAction("Index", new { id });
         }
 
-        // GET: Repairs/Delete/5
-        [Authorize(Roles = WebConstants.AdminRoleName)]
+        [Authorize(Roles = AdminRoleName)]
         public IActionResult Delete(string id)
         {
             if (id == null)
@@ -231,19 +178,8 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var repair = data.Repairs
-                .Select(r => new DeleteRepairViewModel
-                {
-                    Name = r.Name,
-                    Price = r.Price,
-                    StartDate = r.StartDate.ToString(),
-                    EndDate = r.EndDate.ToString(),
-                    Description = r.Description,
-                    CarId = r.CarId,
-                    Id = r.Id
+            var repair = this.repairService.DeleteRepair(id);
 
-                }).ToList()
-                .FirstOrDefault(m => m.Id == id);
             if (repair == null)
             {
                 return NotFound();
@@ -252,25 +188,17 @@ namespace WebApp.Controllers
             return View(repair);
         }
 
-        // POST: Repairs/Delete/5
         [HttpPost, ActionName("Delete")]
-        [Authorize(Roles = WebConstants.AdminRoleName)]
+        [Authorize(Roles = AdminRoleName)]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(string id)
         {
-
-            var repair = data.Repairs.Find(id);
+            var repair = this.repairService.Repair(id);
+            this.repairService.DeleteConfirmed(id);
             id = repair.CarId;
-            data.Repairs.Remove(repair);
-            data.SaveChanges();
             return RedirectToAction("Index", "Repairs", new { id });
         }
 
-        private bool UserIsAdmin()
-        {
-            var userInRole = this.User.IsInRole(WebConstants.AdminRoleName);
 
-            return userInRole;
-        }
     }
 }
