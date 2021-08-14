@@ -19,13 +19,13 @@ namespace WebApp.Models.Repairs
         public decimal Price { get; set; }
 
         public DateTime? StartDate { get; set; }
-        
+
         public DateTime? EndDate { get; set; }
 
         public string Description { get; set; }
 
         public string CarId { get; set; }
-
+        [Required]
         public string RepairTypeId { get; init; }
 
         public IEnumerable<RepairTypeViewModel> RepairTypes { get; set; }

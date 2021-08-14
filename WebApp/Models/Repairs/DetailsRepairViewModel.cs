@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using WebApp.Data.Models;
 
@@ -15,11 +16,10 @@ namespace WebApp.Models.Repairs
         public decimal Price { get; set; }
 
         [Display(Name = "Начало")]
-        [DisplayFormat(DataFormatString = "{dd/MM/yyyy}")]
-        public string StartDate { get; set; }
+        public DateTime StartDate { get; set; }
 
         [Display(Name = "Край")]
-        public string EndDate { get; set; }
+        public DateTime EndDate { get; set; }
         
         [Display(Name = "Снимка")]
         public string PictureUrl { get; set; }

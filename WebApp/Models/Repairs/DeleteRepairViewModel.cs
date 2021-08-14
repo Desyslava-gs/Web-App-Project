@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApp.Models.Repairs
 {
@@ -13,7 +14,6 @@ namespace WebApp.Models.Repairs
         public decimal Price { get; set; }
 
         [Display(Name = "Начало")]
-        [DisplayFormat(DataFormatString = "{dd/MM/yyyy}")]
         public string StartDate { get; set; }
 
         [Display(Name = "Край")]
