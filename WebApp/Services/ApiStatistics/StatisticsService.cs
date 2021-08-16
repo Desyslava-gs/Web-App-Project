@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using WebApp.Data;
-
 namespace WebApp.Services.Statistics
 {
     public class StatisticsService : IStatisticService
@@ -12,15 +11,16 @@ namespace WebApp.Services.Statistics
         {
             this.data = data;
         }
-
-        public StatisticsServiceModel All()
+       
+   
+        public ApiStatisticsServiceModel All()
         {
             var allCars = this.data.Cars.Count();
             var finishedRepairs = this.data.Repairs.Count(r => r.EndDate < DateTime.UtcNow);
             var allRepairs = this.data.Repairs.Count();
             var allClients = this.data.Clients.Count();
               
-            return new StatisticsServiceModel
+            return new ApiStatisticsServiceModel
             {
                 AllClients = allClients,
                 AllCars = allCars,

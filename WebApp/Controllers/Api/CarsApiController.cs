@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Data;
 using WebApp.Models.Api.Cars;
+using WebApp.Services.Cars;
+using WebApp.Services.Statistics;
 
 namespace WebApp.Controllers.Api
 {
@@ -10,36 +13,22 @@ namespace WebApp.Controllers.Api
     [Route("api/cars")]
     public class CarsApiController : ControllerBase
     {
-        private readonly CarRepairDbContext data;
+       
+        private readonly ICarService carService;
 
-        public CarsApiController(CarRepairDbContext data)
+
+        public CarsApiController(ICarService carService)
         {
-            this.data = data;
+            this.carService = carService;
         }
-        
+
         public IActionResult Index()
         {
-            var car = this.data.Cars
-                .OrderBy(c => c.Repairs.Count())
-                .Select(c => new CarsModel
-                {
-                    Make = c.Make,
-                    FinishedRepairs = this.data.Repairs.Count(r => r.EndDate < DateTime.UtcNow),
-                    AllCars = this.data.Cars.Count(),
-                    AllClients = this.data.Clients.Count()
-                }).ToList();
+            var car = this.carService.All();
 
             return Ok(car);
 
         }
-
-
-
-
-
-
-
-
 
 
 

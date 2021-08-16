@@ -1,6 +1,6 @@
-﻿namespace WebApp.Models.Api.Statistics
+﻿namespace WebApp.Services.Statistics
 {
-    public class StatisticsModel
+    public class ApiStatisticsServiceModel
     {
         public int AllCars { get; set; }
         public int AllRepairs { get; set; }

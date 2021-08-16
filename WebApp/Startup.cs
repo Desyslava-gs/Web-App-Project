@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using WebApp.Data;
 using WebApp.Data.Models;
 using WebApp.Infrastructure;
+using WebApp.Services.Cars;
 using WebApp.Services.Clients;
 using WebApp.Services.Repairs;
 using WebApp.Services.Statistics;
@@ -45,7 +47,10 @@ namespace WebApp
                 .AddEntityFrameworkStores<CarRepairDbContext>();
 
             services
-                .AddControllersWithViews();
+                .AddControllersWithViews(options =>
+                {
+                    options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+                });
 
 
 
@@ -53,6 +58,7 @@ namespace WebApp
             services.AddTransient<IRepairService, RepairService>();
             services.AddTransient<IStatisticService, StatisticsService>();
             services.AddTransient<IClientService, ClientService>();
+            services.AddTransient<ICarService, CarService>();
 
             //FACEBOOK 
             services.AddAuthentication().AddFacebook(facebookOptions =>
