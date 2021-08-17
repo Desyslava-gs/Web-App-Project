@@ -261,7 +261,7 @@ namespace WebApp.Controllers
                     Color = c.Color,
                     Description = c.Description,
                     Year = c.Year,
-                    FuelType = c.FuelType.Name,//c.FuelTypeId,
+                    FuelType = c.FuelType.Name,
                     PlateNumber = c.PlateNumber,
                     VinNumber = c.VinNumber,
 
