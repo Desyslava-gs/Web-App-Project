@@ -46,7 +46,8 @@ namespace WebApp.Models.Cars
         public string Description { get; set; }
         
         public string FuelTypeId { get; set; }
-
+        [Required]
+        public string ClientId { get; set; }
         public IEnumerable<FuelTypeViewModel> FuelTypes { get; set; }
     }
 }

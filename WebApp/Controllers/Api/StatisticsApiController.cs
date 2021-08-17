@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Data;
-using WebApp.Models.Api;
+using WebApp.Services.ApiStatistics;
 using WebApp.Services.Repairs;
 using WebApp.Services.Statistics;
 

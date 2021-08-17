@@ -1,4 +1,4 @@
-﻿namespace WebApp.Models.Api.Cars
+﻿namespace WebApp.Services.ApiCars
 {
     public class ApiCarsModel
     {  

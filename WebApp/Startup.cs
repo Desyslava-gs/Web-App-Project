@@ -9,6 +9,8 @@ using Microsoft.Extensions.Hosting;
 using WebApp.Data;
 using WebApp.Data.Models;
 using WebApp.Infrastructure;
+using WebApp.Services.ApiCars;
+using WebApp.Services.ApiStatistics;
 using WebApp.Services.Cars;
 using WebApp.Services.Clients;
 using WebApp.Services.Repairs;
@@ -58,6 +60,7 @@ namespace WebApp
             services.AddTransient<IRepairService, RepairService>();
             services.AddTransient<IStatisticService, StatisticsService>();
             services.AddTransient<IClientService, ClientService>();
+            services.AddTransient<ICarApiService, CarApiService>();
             services.AddTransient<ICarService, CarService>();
 
             //FACEBOOK 

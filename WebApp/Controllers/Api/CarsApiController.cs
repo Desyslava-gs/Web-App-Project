@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Data;
-using WebApp.Models.Api.Cars;
-using WebApp.Services.Cars;
+using WebApp.Services.ApiCars;
 using WebApp.Services.Statistics;
 
 namespace WebApp.Controllers.Api
@@ -14,26 +13,21 @@ namespace WebApp.Controllers.Api
     public class CarsApiController : ControllerBase
     {
        
-        private readonly ICarService carService;
+        private readonly ICarApiService carApiService;
 
 
-        public CarsApiController(ICarService carService)
+        public CarsApiController(ICarApiService carApiService)
         {
-            this.carService = carService;
+            this.carApiService = carApiService;
         }
 
         public IActionResult Index()
         {
-            var car = this.carService.All();
-
+            var car = this.carApiService.All();
             return Ok(car);
 
         }
-
-
-
-
-
+        
         //[HttpGet]
         //public ActionResult<Car> Cars()
         //{

@@ -12,7 +12,7 @@ namespace WebApp.Models.Repairs
 
         [Required]
         [MaxLength(NameMaxLength)]
-        public string Name { get; init; }
+        public string Name { get; init; }  
         [Required]
         [Column(TypeName = PriceFormat)]
 

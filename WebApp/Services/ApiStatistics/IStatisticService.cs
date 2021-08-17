@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using WebApp.Models.Api.Cars;
+﻿using WebApp.Services.Statistics;
 
-namespace WebApp.Services.Statistics
+namespace WebApp.Services.ApiStatistics
 {
     public interface IStatisticService
     {

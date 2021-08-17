@@ -65,7 +65,6 @@ namespace WebApp.Services.Repairs
         {
             var repairData = new Repair()
             {
-                //Id = repair.Id,
                 Name = repair.Name,
                 Price = repair.Price,
                 StartDate = repair.StartDate,

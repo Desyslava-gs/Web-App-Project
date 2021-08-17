@@ -193,6 +193,7 @@ namespace WebApp.Controllers
                 PlateNumber = car.PlateNumber,
                 VinNumber = car.VinNumber,
                 Year = car.Year,
+                ClientId = car.ClientId
             });
         }
 
@@ -225,6 +226,7 @@ namespace WebApp.Controllers
                     PlateNumber = car.PlateNumber,
                     VinNumber = car.VinNumber,
                     Year = car.Year,
+                    ClientId = car.ClientId
                 };
 
                 this.data.Update(carData);

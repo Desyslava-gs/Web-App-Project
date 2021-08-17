@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using WebApp.Data;
-using WebApp.Models.Api.Cars;
 
-namespace WebApp.Services.Cars
+namespace WebApp.Services.ApiCars
 {
-    public class CarService:ICarService
-    {      
-        
+    public class CarApiService: ICarApiService
+    {  
         private readonly CarRepairDbContext data;
 
-        public CarService(CarRepairDbContext data)
+        public CarApiService(CarRepairDbContext data)
         {
             this.data = data;
         }
