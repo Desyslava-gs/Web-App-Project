@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApp.Data;
 
 namespace WebApp.Data.Migrations
 {
     [DbContext(typeof(CarRepairDbContext))]
-    partial class CarRepairDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210816151858_UserE")]
+    partial class UserE
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -265,6 +267,7 @@ namespace WebApp.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RepairId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -532,7 +535,8 @@ namespace WebApp.Data.Migrations
                     b.HasOne("WebApp.Data.Models.Repair", "Repair")
                         .WithMany("Parts")
                         .HasForeignKey("RepairId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Provider");
 

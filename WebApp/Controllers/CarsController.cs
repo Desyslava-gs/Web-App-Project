@@ -205,42 +205,41 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    var carData = new Car
-                    {
-                        Id = car.Id,
-                        Make = car.Make,
-                        Model = car.Model,
-                        Color = car.Color,
-                        Description = car.Description,
-                        FuelTypeId = car.FuelTypeId,
-                        PictureUrl = car.PictureUrl,
-                        PlateNumber = car.PlateNumber,
-                        VinNumber = car.VinNumber,
-                        Year = car.Year,
-                    };
-
-                    this.data.Update(carData);
-                    this.data.SaveChanges();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CarExists(car.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction("Index");
+                car.FuelTypes = this.GetFuelTypes();
+                return View(car);
             }
-            return View(car);
+
+            try
+            {
+                var carData = new Car
+                {
+                    Id = car.Id,
+                    Make = car.Make,
+                    Model = car.Model,
+                    Color = car.Color,
+                    Description = car.Description,
+                    FuelTypeId = car.FuelTypeId,
+                    PictureUrl = car.PictureUrl,
+                    PlateNumber = car.PlateNumber,
+                    VinNumber = car.VinNumber,
+                    Year = car.Year,
+                };
+
+                this.data.Update(carData);
+                this.data.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CarExists(car.Id))
+                {
+                    return NotFound();
+                }
+
+                throw ;
+            }
+            return RedirectToAction("Index");
         }
 
         // GET: Cars1/Delete/5
@@ -283,6 +282,11 @@ namespace WebApp.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult DeleteConfirmed(string id)
         {
+            if (this.data.Repairs.Any(c=>c.CarId==id))
+            {
+             return   RedirectToAction("Error");
+                
+            }
             var car = data.Cars.Find(id);
             data.Cars.Remove(car);
             data.SaveChanges();
@@ -332,7 +336,6 @@ namespace WebApp.Controllers
             return this.data
                 .Clients
                 .Any(u => u.UserId == userId);
-
         }
 
         //private string ProcessUploadedFile(SpeakerViewModel model)

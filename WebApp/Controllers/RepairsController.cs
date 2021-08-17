@@ -6,7 +6,6 @@ using WebApp.Infrastructure;
 using WebApp.Models.Repairs;
 using WebApp.Services.Repairs;
 using static WebApp.WebConstants;
-
 namespace WebApp.Controllers
 {
     public class RepairsController : Controller
@@ -153,7 +152,12 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            if (!ModelState.IsValid) return View(repair);
+            if (!ModelState.IsValid)
+            {
+                repair.CarId = id;
+                repair.RepairTypes = repairService.GetRepairTypes();
+                return View(repair);
+            }
             try
             {
                 this.repairService.EditRepairs(id, repair);
@@ -193,12 +197,20 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(string id)
         {
+            if(repairService.AnyPart(id))
+            {
+                return   RedirectToAction("Error");
+            }
+
             var repair = this.repairService.Repair(id);
             this.repairService.DeleteConfirmed(id);
             id = repair.CarId;
             return RedirectToAction("Index", "Repairs", new { id });
         }
 
-
+        public IActionResult Error()
+        {
+            return View();
+        }
     }
 }

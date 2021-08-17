@@ -23,5 +23,6 @@ namespace WebApp.Services.Repairs
       public bool RepairTypesExists(string rtId);
 
       public Repair Repair(string id);
+      public bool AnyPart(string id);
     }
 }

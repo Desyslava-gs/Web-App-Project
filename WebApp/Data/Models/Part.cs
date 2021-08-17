@@ -20,10 +20,9 @@ namespace WebApp.Data.Models
         
         public string ProviderId { get; init; }
 
-        [Required]
+        
         public Provider Provider { get; init; }
-
-        [Required]                                     
+                                     
         public string RepairId { get; init; }
 
         public Repair Repair { get; init; }

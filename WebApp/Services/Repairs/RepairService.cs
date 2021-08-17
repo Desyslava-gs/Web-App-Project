@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using WebApp.Models.Repairs;
 using WebApp.Data;
 using WebApp.Data.Models;
@@ -115,12 +116,17 @@ namespace WebApp.Services.Repairs
 
         public void DeleteConfirmed(string id)
         {
-           var repair = this.data.Repairs.Find(id);
+
+            var repair = this.data.Repairs.Find(id);
             this.data.Repairs.Remove(repair);
-            this.data.SaveChanges(); 
+            this.data.SaveChanges();
             //id = repair.CarId;
         }
 
+        public bool AnyPart(string id)
+        {
+            return this.data.Parts.Any(c => c.RepairId == id);
+        }
         public Repair GetRepairId(string id)
         {
             return this. data.Repairs.FirstOrDefault(r => r.Id == id);
