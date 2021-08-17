@@ -42,7 +42,8 @@ namespace WebApp.Models.Cars
             MinimumLength = DescriptionMinLength, 
             ErrorMessage = "The field Description must be minimum length of {2}.")]
         public string Description { get; set; }
-        //public string ClienId { get; set; }
+        
+        public string ClienId { get; set; }
         public string FuelTypeId { get; set; }
         public IEnumerable<FuelTypeViewModel> FuelTypes { get; set; }
     }

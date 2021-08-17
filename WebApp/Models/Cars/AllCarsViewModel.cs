@@ -8,8 +8,6 @@ namespace WebApp.Models.Cars
 {
     public class AllCarsViewModel
     {
-        //public CarSorting Sorting { get; set; }
-    
         public string SearchList { get; set; }
         public List<IndexCarAllViewModel> CarsList { get; set; }
     }

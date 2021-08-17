@@ -1,31 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebApp.Data;
-using WebApp.Data.Models;
 using WebApp.Infrastructure;
 using WebApp.Models.Cars;
+using WebApp.Services.Cars;
+using WebApp.Services.Clients;
 
 namespace WebApp.Controllers
 {
     public class CarsController : Controller
     {
-        private readonly CarRepairDbContext data;
 
-        public CarsController(CarRepairDbContext data)
+        private readonly ICarService carService;
+        private readonly IClientService clientService;
+
+        public CarsController(ICarService carService, IClientService clientService)
         {
-            this.data = data;
+            this.carService = carService;
+            this.clientService = clientService;
         }
-
-        // GET: Cars1
+        
         [Route("Cars/Index")]
         public IActionResult Index([FromQuery] string search)
 
         {
-            var carsQuery = this.data.Cars.AsQueryable();
+            var carsQuery = this.carService.CarsQuery();
             if (!string.IsNullOrEmpty(search))
             {
                 carsQuery = carsQuery.Where(c =>
@@ -35,32 +35,18 @@ namespace WebApp.Controllers
                 c.PlateNumber.ToLower().Contains(search.ToLower()));
             }
 
-
-            if (!IsClient(this.User.GetId())&& !UserIsAdmin())
+            if (!this.clientService.IsClient(this.User.GetId()) && !this.User.IsAdmin())
             {
                 return RedirectToAction("Index", "Clients");
             }
 
-            if (IsClient(this.User.GetId()))
+            if (this.clientService.IsClient(this.User.GetId()))
             {
-                var userId = this.ClientId(this.User.GetId());
-                carsQuery = carsQuery.Where(c => c.ClientId == userId);
+                var clientId = this.carService.ClientId(this.User.GetId());
+                carsQuery = carsQuery.Where(c => c.ClientId == clientId);
             }
 
-            var car = carsQuery
-                .OrderByDescending(c => c.Repairs.Count())
-                 .Select(c => new IndexCarAllViewModel
-                 {
-                     Id = c.Id,
-                     Make = c.Make,
-                     Model = c.Model,
-                     PictureUrl = c.PictureUrl,
-                     PlateNumber = c.PlateNumber,
-                     Year = c.Year,
-                     FinishedRepairs = this.data.Repairs.Count(r => r.EndDate < DateTime.UtcNow),
-                     AllCars = this.data.Cars.Count(),
-                     AllClients = this.data.Clients.Count()
-                 }).ToList();
+            var car = this.carService.AllCars(carsQuery);
 
             return View(new AllCarsViewModel
             {
@@ -70,36 +56,18 @@ namespace WebApp.Controllers
 
         }
 
-
-
-        //// GET: Cars1/Details/5
         public IActionResult Details(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            if (!UserIsClient()&&!UserIsAdmin())
+            if (!this.clientService.IsClient(this.User.GetId()) && !this.User.IsAdmin())
             {
                 return RedirectToAction("Index", "Cars");
             }
-            var car = this.data.Cars
-                .Where(m => m.Id == id)
-                .Select(c => new DetailsCarViewModel
-                {
-                    Id = c.Id,
-                    PictureUrl = c.PictureUrl,
-                    Make = c.Make,
-                    Model = c.Model,
-                    Color = c.Color,
-                    Description = c.Description,
-                    Year = c.Year,
-                    FuelType = c.FuelType.Name,
-                    PlateNumber = c.PlateNumber,
-                    VinNumber = c.VinNumber,
 
-                }).ToList()
-                .FirstOrDefault();
+            var car = this.carService.DetailsCar(id);
 
             if (car == null)
             {
@@ -109,17 +77,16 @@ namespace WebApp.Controllers
             return View(car);
         }
 
-        // GET: Cars/Create
         [Authorize]
         public IActionResult Create()
         {
-            if (!this.UserIsClient()&&!UserIsAdmin())
+            if (!this.clientService.IsClient(User.GetId()) && !this.User.IsAdmin())
             {
                 return RedirectToAction("Index", "Clients");
             }
             return View(new CreateCarFormModel
             {
-                FuelTypes = this.GetFuelTypes()
+                FuelTypes = this.carService.GetFuelTypes()
             });
 
         }
@@ -130,43 +97,25 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(CreateCarFormModel car)
         {
-            if (!this.data.FuelTypes.Any(c => c.Id == car.FuelTypeId))
+            if (!this.carService.AnyFuelType(car.FuelTypeId))
             {
                 this.ModelState.AddModelError(nameof(car.FuelTypeId), "FuelType does not exist.");
             }
 
             if (!ModelState.IsValid)
             {
-                car.FuelTypes = this.GetFuelTypes();
+                car.FuelTypes = this.carService.GetFuelTypes();
                 return View(car);
             }
-            var clientId = this.ClientId(this.User.GetId());
 
-            var carData = new Car
-            {
+            var clientId = this.carService.ClientId(this.User.GetId());
 
-                Make = car.Make,
-                Model = car.Model,
-                Color = car.Color,
-                Description = car.Description,
-                FuelTypeId = car.FuelTypeId,
-                PictureUrl = car.PictureUrl,
-                PlateNumber = car.PlateNumber,
-                VinNumber = car.VinNumber,
-                Year = car.Year,
-                Repairs = new List<Repair>(),
-                ClientId = clientId
+            this.carService.CreateCars(car, clientId);
 
-            };
-
-            this.data.Cars.Add(carData);
-            this.data.SaveChanges();
             return RedirectToAction("Index", "Cars");
-
         }
 
-
-        [Authorize]
+        [Authorize] //Client and Admin!!!
         public IActionResult Edit(string id)
         {
             if (id == null)
@@ -174,7 +123,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var car = data.Cars.Find(id);
+            var car = this.carService.Car(id);
 
             if (car == null)
             {
@@ -182,7 +131,7 @@ namespace WebApp.Controllers
             }
             return View(new EditCarFormModel
             {
-                FuelTypes = this.GetFuelTypes(),
+                FuelTypes = this.carService.GetFuelTypes(),
                 Id = car.Id,
                 Make = car.Make,
                 Model = car.Model,
@@ -206,45 +155,29 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
+
             if (!ModelState.IsValid)
             {
-                car.FuelTypes = this.GetFuelTypes();
+                car.FuelTypes = this.carService.GetFuelTypes();
                 return View(car);
             }
 
             try
             {
-                var carData = new Car
-                {
-                    Id = car.Id,
-                    Make = car.Make,
-                    Model = car.Model,
-                    Color = car.Color,
-                    Description = car.Description,
-                    FuelTypeId = car.FuelTypeId,
-                    PictureUrl = car.PictureUrl,
-                    PlateNumber = car.PlateNumber,
-                    VinNumber = car.VinNumber,
-                    Year = car.Year,
-                    ClientId = car.ClientId
-                };
-
-                this.data.Update(carData);
-                this.data.SaveChanges();
+                this.carService.EditCars(id, car);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CarExists(car.Id))
+                if (!this.carService.CarExists(car.Id))
                 {
                     return NotFound();
                 }
-
-                throw ;
+                throw;
             }
+
             return RedirectToAction("Index");
         }
 
-        // GET: Cars1/Delete/5
         [Authorize]
         public IActionResult Delete(string id)
         {
@@ -253,23 +186,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var car = data.Cars
-                .Select(c => new DeleteCarViewModel
-                {
-                    Id = c.Id,
-                    PictureUrl = c.PictureUrl,
-                    Make = c.Make,
-                    Model = c.Model,
-                    Color = c.Color,
-                    Description = c.Description,
-                    Year = c.Year,
-                    FuelType = c.FuelType.Name,
-                    PlateNumber = c.PlateNumber,
-                    VinNumber = c.VinNumber,
-
-                }).ToList()
-                .FirstOrDefault(m => m.Id == id);
-            ;
+            var car = this.carService.DeleteCar(id);
             if (car == null)
             {
                 return NotFound();
@@ -277,68 +194,21 @@ namespace WebApp.Controllers
 
             return View(car);
         }
-
-        // POST: Cars1/Delete/5
+        
         [HttpPost, ActionName("Delete")]
         [Authorize]
         [AutoValidateAntiforgeryToken]
         public IActionResult DeleteConfirmed(string id)
         {
-            if (this.data.Repairs.Any(c=>c.CarId==id))
+            if (this.carService.AnyReairs(id))
             {
-             return   RedirectToAction("Error");
-                
+                return RedirectToAction("Error");
+
             }
-            var car = data.Cars.Find(id);
-            data.Cars.Remove(car);
-            data.SaveChanges();
+            this.carService.DeleteConfirmed(id);
             return RedirectToAction("Index");
         }
 
-        private bool CarExists(string id)
-        {
-            return data.Cars.Any(e => e.Id == id);
-        }
-
-        private IEnumerable<FuelTypeViewModel> GetFuelTypes()
-        {
-            return data
-                .FuelTypes
-                .Select(ft => new FuelTypeViewModel
-                {
-                    Id = ft.Id,
-                    Name = ft.Name,
-
-                }).ToList();
-        }
-        private bool UserIsClient()
-        {
-            var userId = this.User.GetId();
-            var userIsClient = this.data.Clients.Any(c => c.UserId == userId);
-            return userIsClient;
-        }
-        private bool UserIsAdmin()
-        {
-            var userInRole = this.User.IsInRole(WebConstants.AdminRoleName);
-          
-            return userInRole;
-        }
-
-        public string ClientId(string userId)
-        {
-            return this.data
-                .Clients
-                .Where(d => d.UserId == userId)
-                .Select(d => d.Id)
-                .FirstOrDefault();
-        }
-
-        public bool IsClient(string userId)
-        {
-            return this.data
-                .Clients
-                .Any(u => u.UserId == userId);
-        }
 
         //private string ProcessUploadedFile(SpeakerViewModel model)
         //{

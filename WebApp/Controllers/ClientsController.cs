@@ -5,16 +5,17 @@ using WebApp.Data;
 using WebApp.Data.Models;
 using WebApp.Infrastructure;
 using WebApp.Models.Clients;
+using WebApp.Services.Clients;
 
 namespace WebApp.Controllers
 {
     public class ClientsController : Controller
     {
-        private readonly CarRepairDbContext data;
+        private readonly IClientService clientService;
 
-        public ClientsController(CarRepairDbContext data)
+        public ClientsController(IClientService clientService )
         {
-            this.data = data;
+            this.clientService =clientService;
         }
 
         [Authorize]
@@ -29,11 +30,9 @@ namespace WebApp.Controllers
         {
             var userId = this.User.GetId();
 
-            var userIdAlreadyDealer = this.data
-                .Clients
-                .Any(d => d.UserId == userId);
+            var alreadyClient = this.clientService.IsClient(userId);
 
-            if (userIdAlreadyDealer)
+            if (alreadyClient)
             {
                 return BadRequest("Вече сте Клиент!");
             }
@@ -43,15 +42,7 @@ namespace WebApp.Controllers
                 return View(client);
             }
 
-            var clientData = new Client
-            {
-                Name = client.Name,
-                PhoneNumber = client.PhoneNumber,
-                UserId = userId
-            };
-
-            this.data.Clients.Add(clientData);
-            this.data.SaveChanges();
+            this.clientService.CreateClient(client,userId);
 
             return RedirectToAction("Index", "Cars");
         }

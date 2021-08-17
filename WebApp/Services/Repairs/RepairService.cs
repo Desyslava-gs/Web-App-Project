@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc;
 using WebApp.Models.Repairs;
 using WebApp.Data;
 using WebApp.Data.Models;
@@ -119,7 +117,6 @@ namespace WebApp.Services.Repairs
             var repair = this.data.Repairs.Find(id);
             this.data.Repairs.Remove(repair);
             this.data.SaveChanges();
-            //id = repair.CarId;
         }
 
         public bool AnyPart(string id)

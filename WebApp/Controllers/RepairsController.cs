@@ -13,7 +13,6 @@ namespace WebApp.Controllers
 
         private readonly IRepairService repairService;
 
-
         public RepairsController(IRepairService repairService)
         {
             this.repairService = repairService;
@@ -42,7 +41,6 @@ namespace WebApp.Controllers
         //    //}
         //    return View(repairs);
         //}
-
 
         public IActionResult Non()
         {
