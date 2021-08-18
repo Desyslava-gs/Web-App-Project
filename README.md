@@ -27,3 +27,4 @@ MARSERVIZ is a site that facilitates the work of the mechanic. Gives easy and qu
 •	Facebook login (for developers)
 •	Custom Identity (login and register with initial choice if you want to be a client)
 •	Integration of Google Maps (For development purposes only)
+•	Azure: https://webapp20210818171542.azurewebsites.net/
